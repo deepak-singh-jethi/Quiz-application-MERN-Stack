@@ -34,12 +34,6 @@ const userSchema = new mongoose.Schema(
       default: "user",
       enum: ["user", "instructor", "admin", "finance"],
     },
-    quizIds: [
-      {
-        type: mongoose.Schema.ObjectId,
-        ref: "Quiz",
-      },
-    ],
     createdAt: {
       type: Date,
       default: Date.now(),

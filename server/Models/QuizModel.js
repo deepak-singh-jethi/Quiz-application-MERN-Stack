@@ -34,10 +34,7 @@ const QuizSchema = new mongoose.Schema(
       type: Number,
       required: [true, "Total Marks Can't be empty"],
     },
-    createdBy: {
-      type: mongoose.Schema.ObjectId,
-      ref: "User",
-    },
+
     createdAt: {
       type: Date,
       default: Date.now,
@@ -45,6 +42,21 @@ const QuizSchema = new mongoose.Schema(
     isPublished: {
       type: Boolean,
       default: false,
+    },
+    numberOfStudents: {
+      type: Number,
+      default: 0,
+    },
+    attemptedBy: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
+      },
+    ],
+    createdBy: {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+      required: [true, "Creator is required"],
     },
   },
   {
@@ -55,11 +67,14 @@ const QuizSchema = new mongoose.Schema(
 
 // middleWare to remove exams from search results if they are not published or deleted
 
-QuizSchema.pre(/^find/, function (next) {
-  this.find({ isPublished: true });
+// QuizSchema.pre(/^find/, function (next) {
+//   const userRole = this.getQuery().userRole;
 
-  next();
-});
+//   console.log(userRole);
+
+//   this.find({ isPublished: true });
+//   next();
+// });
 
 const Quiz = mongoose.model("Quiz", QuizSchema);
 module.exports = Quiz;

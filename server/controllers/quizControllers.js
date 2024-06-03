@@ -24,25 +24,7 @@ exports.createQuiz = catchAsyncError(async (req, res, next) => {
   });
 });
 
-// get all quizzes
-exports.getAllQuiz = catchAsyncError(async (req, res, next) => {
-  const feature = new APIFeatures(Quiz.find(), req.query)
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate();
-  const quiz = await feature.query;
-
-  res.status(200).json({
-    status: "success",
-    length: quiz.length,
-    data: {
-      quiz,
-    },
-  });
-});
-
-// get a single quiz
+// * get a single quiz
 exports.getQuiz = catchAsyncError(async (req, res, next) => {
   const quiz = await Quiz.findById(req.params.id).populate({
     path: "questions",
@@ -62,7 +44,59 @@ exports.getQuiz = catchAsyncError(async (req, res, next) => {
   });
 });
 
-// delete quiz
+// * get all quizzes for user
+exports.getAllQuiz = catchAsyncError(async (req, res, next) => {
+  const feature = new APIFeatures(Quiz.find({ isPublished: true }), req.query)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+  const quiz = await feature.query;
+
+  res.status(200).json({
+    status: "success",
+    length: quiz.length,
+    data: {
+      quiz,
+    },
+  });
+});
+
+// * get All Quizzes for admin
+exports.getAllUnPublishedQuiz = catchAsyncError(async (req, res, next) => {
+  const feature = new APIFeatures(Quiz.find({ isPublished: false }), req.query)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+  const quiz = await feature.query;
+
+  res.status(200).json({
+    status: "success",
+    length: quiz.length,
+    data: {
+      quiz,
+    },
+  });
+});
+
+// * update a quiz
+exports.updateQuiz = catchAsyncError(async (req, res, next) => {
+  const quiz = await Quiz.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  res.status(200).json({
+    status: "success",
+    message: "Quiz Updated Successfully",
+    data: {
+      quiz,
+    },
+  });
+});
+
+// * delete quiz
 exports.deleteQuiz = catchAsyncError(async (req, res, next) => {
   // * without password admin is not allowed to delete a quiz
   const { password } = req.body;
@@ -96,28 +130,9 @@ exports.deleteQuiz = catchAsyncError(async (req, res, next) => {
   });
 });
 
-// update a quiz
-exports.updateQuiz = catchAsyncError(async (req, res, next) => {
-  console.log(req.body);
-  const quiz = await Quiz.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
-
-  console.log(quiz);
-
-  res.status(200).json({
-    status: "success",
-    message: "Quiz Updated Successfully",
-    data: {
-      quiz,
-    },
-  });
-});
-
 // * middleware related to questions
 
-// adding questions
+//  * adding questions
 exports.addQuestion = catchAsyncError(async (req, res, next) => {
   const quizId = req.params.quizId;
   const questions = req.body; // assuming questions is an array of question objects
@@ -147,7 +162,7 @@ exports.addQuestion = catchAsyncError(async (req, res, next) => {
   });
 });
 
-// updating question
+// * updating question
 exports.updateQuestion = catchAsyncError(async (req, res, next) => {
   console.log(req.body);
 
@@ -186,7 +201,6 @@ exports.updateQuestion = catchAsyncError(async (req, res, next) => {
 });
 
 // *  deleting a qus
-
 exports.deleteQuestion = catchAsyncError(async (req, res, next) => {
   const questionId = req.params.qusId;
   console.log(questionId);
@@ -213,7 +227,7 @@ exports.deleteQuestion = catchAsyncError(async (req, res, next) => {
   });
 });
 
-// get a qus
+// * get a qus
 exports.getQuestion = catchAsyncError(async (req, res, next) => {
   const question = await Question.findById(req.params.qusId);
   console.log(req.params.qusId);

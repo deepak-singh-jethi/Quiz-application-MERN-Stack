@@ -5,20 +5,27 @@ import {
   createRoutesFromElements,
   RouterProvider,
 } from "react-router-dom";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "./utils/http.js";
+
 import "./App.css";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import Root from "./RouterLayout/Root";
-import ProtectedRoute from "./RouterLayout/ProtectedRoute";
+import ProtectedRoute from "./utils/HigerOrderComponent/ProtectedRoute.jsx";
 import HomeLayout from "./RouterLayout/HomeLayout";
 import AuthLayout, { action as AuthAction } from "./RouterLayout/AuthLayout";
+import AdminLayout from "./RouterLayout/AdminLayout.jsx";
+import UserLayout from "./RouterLayout/UserLayout.jsx";
+import ErrorPage from "./components/ui/ErrorPage.jsx";
+import UnauthorizedPage from "./components/ui/UnauthorizedPage.jsx";
 
 // Define router with all routes
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<Root />}>
+    <Route path="/" element={<Root />} errorElement={<ErrorPage />}>
       {/* Public Routes */}
       <Route path="auth" element={<AuthLayout />} action={AuthAction} />
-      <Route path="notAuthorized" element={<div>Not Authorized</div>} />
+      <Route path="notAuthorized" element={<UnauthorizedPage />} />
 
       {/* Protected Home layout Route */}
       <Route
@@ -32,107 +39,30 @@ const router = createBrowserRouter(
       />
 
       {/* Admin Routes */}
-      <Route path="admin">
-        <Route
-          path="quizzes"
-          element={
-            <ProtectedRoute
-              element={<h1>All Quiz</h1>}
-              expectedRoles={["admin"]}
-            />
-          }
-        />
-        <Route
-          path="quizzes/createQuiz"
-          element={
-            <ProtectedRoute
-              element={<h1>Create Quiz Page</h1>}
-              expectedRoles={["admin"]}
-            />
-          }
-        />
-        <Route
-          path="quizzes/editQuiz"
-          element={
-            <ProtectedRoute
-              element={<h1>Edit Quiz</h1>}
-              expectedRoles={["admin"]}
-            />
-          }
-        />
-        <Route
-          path="results"
-          element={
-            <ProtectedRoute
-              element={<h1>Results</h1>}
-              expectedRoles={["admin"]}
-            />
-          }
-        />
-        <Route
-          path="results/:id"
-          element={
-            <ProtectedRoute
-              element={<h1>1 Result</h1>}
-              expectedRoles={["admin"]}
-            />
-          }
-        />
-        <Route
-          path="students"
-          element={
-            <ProtectedRoute
-              element={<h1>Students page</h1>}
-              expectedRoles={["admin"]}
-            />
-          }
-        />
-        <Route
-          path="students/:studentId"
-          element={
-            <ProtectedRoute
-              element={<h1>Student Detail</h1>}
-              expectedRoles={["admin"]}
-            />
-          }
-        />
+      <Route
+        path="admin"
+        element={
+          <ProtectedRoute element={<AdminLayout />} expectedRoles={["admin"]} />
+        }>
+        <Route path="quizzes" element={<h1>All Quiz</h1>} />
+        <Route path="quizzes/createQuiz" element={<h1>Create Quiz Page</h1>} />
+        <Route path="quizzes/editQuiz" element={<h1>Edit Quiz</h1>} />
+        <Route path="results" element={<h1>Results</h1>} />
+        <Route path="results/:id" element={<h1>1 Result</h1>} />
+        <Route path="students" element={<h1>Students page</h1>} />
+        <Route path="students/:studentId" element={<h1>Student Detail</h1>} />
       </Route>
 
       {/* User Routes */}
-      <Route path="user">
-        <Route
-          path="quizzes"
-          element={
-            <ProtectedRoute
-              element={<h1>All quizzes</h1>}
-              expectedRoles={["user"]}
-            />
-          }
-        />
-        <Route
-          path="quizzes/:quizId"
-          element={
-            <ProtectedRoute element={<h1>Quiz</h1>} expectedRoles={["user"]} />
-          }
-        />
-        <Route
-          path="results"
-          element={
-            <ProtectedRoute
-              element={<h1>My Results</h1>}
-              expectedRoles={["user"]}
-            />
-          }
-        />
-        <Route
-          path="results/:quizId"
-          element={
-            <ProtectedRoute
-              element={<h1>MY 1 Quiz Result</h1>}
-              expectedRoles={["user"]}
-            />
-          }
-        />
+      <Route
+        path="user"
+        element={
+          <ProtectedRoute element={<UserLayout />} expectedRoles={["user"]} />
+        }>
+        <Route path="quizzes" element={<h1>Quizzes</h1>} />
+        <Route path="quizzes/:quizId" element={<h1>Quiz</h1>} />
+        <Route path="results" element={<h1>My Results</h1>} />
+        <Route path="results/:quizId" element={<h1>MY 1 Quiz Result</h1>} />
       </Route>
     </Route>
   )
@@ -140,9 +70,11 @@ const router = createBrowserRouter(
 
 function App() {
   return (
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
+    </QueryClientProvider>
   );
 }
 

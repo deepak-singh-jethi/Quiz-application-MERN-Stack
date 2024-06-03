@@ -2,6 +2,7 @@ const catchAsyncError = require("../utils/catchAsyncError");
 const AppError = require("../utils/AppError");
 const APIFeatures = require("../utils/APIFeatures");
 const User = require("../Models/UserModel");
+const Quiz = require("../models/QuizModel");
 const Result = require("../Models/ResultModel");
 const Question = require("../Models/QuestionModel");
 
@@ -14,6 +15,10 @@ exports.createResult = catchAsyncError(async (req, res, next) => {
   if (!answers || answers.length === 0) {
     return next(new AppError("Answers cannot be empty", 400));
   }
+
+  // TODO check if user has already attempted the quiz
+  // till then handle from the frontend => if user has already submitted the quiz don't give him route to attempt the quiz
+  // const existingResult = await Result.findOne({ user: userId, quiz: quizId });
 
   // Calculate score
   let score = 0;
@@ -35,6 +40,11 @@ exports.createResult = catchAsyncError(async (req, res, next) => {
     quiz: quizId,
     answers,
     score, // Set the calculated score
+  });
+
+  await Quiz.findByIdAndUpdate(quizId, {
+    $inc: { numberOfStudents: 1 },
+    $addToSet: { attemptedBy: userId },
   });
 
   res.status(200).json({
@@ -65,13 +75,12 @@ exports.getQuizResults = catchAsyncError(async (req, res, next) => {
 });
 
 //  get all results of a user
-exports.getUserResults = catchAsyncError(async (req, res, next) => {
+exports.getAllUserResults = catchAsyncError(async (req, res, next) => {
   const userId = req.user.id;
 
   const results = await Result.find({ user: userId })
     .populate({
       path: "quiz",
-      select: "name",
     })
     .select("-user -answers -__v")
     .sort({ createdAt: -1 });
@@ -79,6 +88,24 @@ exports.getUserResults = catchAsyncError(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     results,
+  });
+});
+
+// get user result for a quiz
+exports.getUserQuizResult = catchAsyncError(async (req, res, next) => {
+  const userId = req.user.id;
+  const quizId = req.params.quizId;
+
+  const result = await Result.findOne({ user: userId, quiz: quizId })
+    .select("-__v")
+    .populate({
+      path: "answers.question",
+      select: "question options -_id",
+    });
+
+  res.status(200).json({
+    status: "success",
+    result,
   });
 });
 

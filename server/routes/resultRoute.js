@@ -12,6 +12,7 @@ router
   .post(resultController.createResult)
   .get(resultController.getQuizResults);
 
-router.route("/user/:userId").get(resultController.getUserResults);
+router.route("/user/:userId").get(resultController.getAllUserResults);
+router.route("/user/quiz/:quizId").get(resultController.getUserQuizResult);
 
 module.exports = router;

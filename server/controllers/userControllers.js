@@ -60,8 +60,6 @@ exports.getUser = catchAsyncError(async (req, res, next) => {
 
 // get all users
 exports.getAllUsers = catchAsyncError(async (req, res, next) => {
-  console.log(req.query);
-
   const features = new APIFeatures(User.find(), req.query)
     .filter()
     .sort()

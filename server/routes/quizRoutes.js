@@ -16,6 +16,7 @@ router.use(authController.restrictTo("admin"));
 router.post("", quizController.createQuiz);
 router.delete("/:id", quizController.deleteQuiz);
 router.patch("/:id", quizController.updateQuiz);
+router.get("/admin/upcoming", quizController.getAllUnPublishedQuiz);
 
 // 2. handling the questions of a quiz
 router.post("/questions/:quizId", quizController.addQuestion);

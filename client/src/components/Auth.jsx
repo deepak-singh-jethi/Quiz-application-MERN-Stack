@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "./micro/Button";
+
 import { Form, Link, useActionData, useSearchParams } from "react-router-dom";
 
 const inputStyle =
@@ -53,7 +53,11 @@ const Auth = () => {
               />
             </div>
           )}
-          <Button>{`${isLogin ? "Login" : "Register"}`}</Button>
+          <div className="w-full text-center">
+            <button className="my-4 bg-[#D9D9DA] rounded-full px-6 py-2 hover:bg-gray-300 hover:text-gray-800">
+              {`${isLogin ? "Login" : "Register"}`}
+            </button>
+          </div>
         </Form>
 
         <p className="mt-4 text-center">
