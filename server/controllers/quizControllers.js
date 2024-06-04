@@ -62,7 +62,8 @@ exports.getAllQuiz = catchAsyncError(async (req, res, next) => {
   });
 });
 
-// * get All Quizzes for admin
+// * get All unpublished Quizzes for admin
+
 exports.getAllUnPublishedQuiz = catchAsyncError(async (req, res, next) => {
   const feature = new APIFeatures(Quiz.find({ isPublished: false }), req.query)
     .filter()

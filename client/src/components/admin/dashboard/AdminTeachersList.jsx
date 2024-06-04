@@ -1,5 +1,6 @@
 import React from "react";
 import withDataFetching from "../../../utils/HigerOrderComponent/withDataFetching.jsx";
+import DashBoardHeadings from "../../Shared/DashBoardHeading.jsx";
 
 const TeachersList = ({ data }) => {
   if (!data || !data.users || data.users.length === 0) {
@@ -12,12 +13,10 @@ const TeachersList = ({ data }) => {
 
   return (
     <div className="p-4 bg-gray-800 border border-gray-200 rounded-lg shadow-sm xl:w-fit w-full md:basis-1/4 mt-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="sm:text-3xl text-xl font-semibold text-white">
-          Teachers List
-        </h1>
-        <span className="text-blue-600 font-bold underline">Manage..</span>
-      </div>
+      {/* card heading */}
+      <DashBoardHeadings heading="Teachers" path="Manage.." />
+
+      {/* card body and teachers card */}
       <div className="grid grid-cols-1 gap-6">
         {data.users.map((user) => (
           <div

@@ -1,8 +1,8 @@
 // withDataFetching.js
 import React, { useContext } from "react";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "../../components/Shared/Loading";
-import ErrorBlock from "../../components/Shared/ErrorBlock";
+import Loading from "../../components/ui/Loading";
+import ErrorBlock from "../../components/ui/ErrorBlock";
 import { AuthContext } from "../../context/AuthContext";
 import { authorizedFetcher } from "../http";
 

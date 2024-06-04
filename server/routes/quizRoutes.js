@@ -11,7 +11,7 @@ router.get("", quizController.getAllQuiz);
 router.get("/:id", quizController.getQuiz);
 
 // * restrict create update and delete quiz to admin
-router.use(authController.restrictTo("admin"));
+router.use(authController.restrictTo("admin", "instructor"));
 
 router.post("", quizController.createQuiz);
 router.delete("/:id", quizController.deleteQuiz);

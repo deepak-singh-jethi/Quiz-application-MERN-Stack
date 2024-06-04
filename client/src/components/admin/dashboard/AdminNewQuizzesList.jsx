@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import withDataFetching from "../../../utils/HigerOrderComponent/withDataFetching.jsx";
+import DashBoardHeadings from "../../Shared/DashBoardHeading.jsx";
 
 const URL = "http://localhost:3000/api/v1/quiz?limit=6";
 
@@ -14,14 +15,8 @@ const NewQuizzesList = ({ data }) => {
   return (
     <div className="md:p-6 p-3 bg-gray-800 border border-gray-200 rounded-lg shadow-sm mt-6 xl:w-fit w-full md:basis-3/4">
       {/* heading area */}
-      <div className="flex justify-between items-center mb-6 mx-4 md:mx-10">
-        <h1 className="text-2xl basis-3/4 md:text-3xl font-semibold text-white">
-          Ongoing Quizzes
-        </h1>
-        <Link to="/quizzes" className="text-blue-600 font-semibold underline">
-          Show more..
-        </Link>
-      </div>
+      <DashBoardHeadings heading="Ongoing Quizzes" path="Show more.." />
+
       {/* cards area */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {data.quiz.map((quiz) => (
