@@ -1,8 +1,8 @@
 import React from "react";
 import withDataFetching from "../../../utils/HigerOrderComponent/withDataFetching.jsx";
-import DashBoardHeadings from "../../Shared/DashBoardHeading.jsx";
+import DashBoardHeadings from "../../ui/dashBoard/DashBoardHeading.jsx";
 
-const TeachersList = ({ data }) => {
+export const TeachersList = ({ data }) => {
   if (!data || !data.users || data.users.length === 0) {
     return (
       <div className="text-gray-600 text-center p-6">
@@ -14,8 +14,11 @@ const TeachersList = ({ data }) => {
   return (
     <div className="p-4 bg-gray-800 border border-gray-200 rounded-lg shadow-sm xl:w-fit w-full md:basis-1/4 mt-6">
       {/* card heading */}
-      <DashBoardHeadings heading="Teachers" path="Manage.." />
-
+      <DashBoardHeadings
+        heading="Teachers"
+        path="Manage.."
+        link="/admin/teachers"
+      />
       {/* card body and teachers card */}
       <div className="grid grid-cols-1 gap-6">
         {data.users.map((user) => (
@@ -42,11 +45,3 @@ const TeachersList = ({ data }) => {
     </div>
   );
 };
-
-// Wrap TeachersList with withDataFetching HOC
-const AdminTeachersList = withDataFetching(TeachersList, {
-  queryKey: ["teachers"],
-  URL: "http://localhost:3000/api/v1/users?role=instructor&limit=5",
-});
-
-export default AdminTeachersList;

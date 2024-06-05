@@ -1,21 +1,34 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../../context/AuthContext.jsx";
+import { IoCalendarClearOutline } from "react-icons/io5";
 
-import withDataFetching from "../../../utils/HigerOrderComponent/withDataFetching.jsx";
-import DashBoardHeadings from "../../Shared/DashBoardHeading.jsx";
+import DashBoardHeadings from "./DashBoardHeading.jsx";
 
-const URL = "http://localhost:3000/api/v1/quiz?limit=6";
+export const NewQuizzesList = ({ data }) => {
+  const { role } = useContext(AuthContext);
 
-const NewQuizzesList = ({ data }) => {
   if (!data || !data.quiz || data.quiz.length === 0)
     return (
-      <div className="text-gray-600 text-center p-6">No Upcoming Quizzes</div>
+      <div className="flex flex-col items-center justify-center text-gray-600 text-center p-6 bg-gray-100 border border-gray-200 rounded-lg shadow-md">
+        <IoCalendarClearOutline className="text-6xl text-gray-400 mb-4" />
+        <p className="text-lg">You don't have any live quizzes...</p>
+        <Link
+          to={`/${role}/quizzes/createQuiz`}
+          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700 transition duration-300">
+          Create New Quiz
+        </Link>
+      </div>
     );
 
   return (
     <div className="md:p-6 p-3 bg-gray-800 border border-gray-200 rounded-lg shadow-sm mt-6 xl:w-fit w-full md:basis-3/4">
       {/* heading area */}
-      <DashBoardHeadings heading="Ongoing Quizzes" path="Show more.." />
+      <DashBoardHeadings
+        heading="Ongoing Quizzes"
+        path="Show more.."
+        link="admin/quizzes"
+      />
 
       {/* cards area */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -66,9 +79,9 @@ const NewQuizzesList = ({ data }) => {
             {/* start quiz button */}
             <div className="mt-2 text-right">
               <Link
-                to={`/quiz/${quiz.id}`}
+                to={`${role}/quizzes/${quiz.id}`}
                 className="inline-block bg-[#1F2937] text-white py-1 sm:py-2 sm:px-4 px-2 rounded-lg hover:bg-[#2d3642] transition duration-200">
-                Start Quiz
+                Quiz Details
               </Link>
             </div>
           </div>
@@ -77,10 +90,3 @@ const NewQuizzesList = ({ data }) => {
     </div>
   );
 };
-
-const AdminNewQuizzesList = withDataFetching(NewQuizzesList, {
-  queryKey: ["new_5_quiz"],
-  URL,
-});
-
-export default AdminNewQuizzesList;

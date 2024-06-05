@@ -1,5 +1,5 @@
 import React from "react";
-import MainLayout from "../../Shared/MainLayout";
+import MainLayout from "../../ui/MainLayout";
 
 const UserDashboard = () => {
   return (

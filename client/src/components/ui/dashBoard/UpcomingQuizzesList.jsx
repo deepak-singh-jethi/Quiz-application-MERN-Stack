@@ -1,22 +1,39 @@
-import React, { memo } from "react";
+import React, { memo, useContext } from "react";
 import { Link } from "react-router-dom";
+import { IoCalendarClearOutline } from "react-icons/io5";
 
-import withDataFetching from "../../../utils/HigerOrderComponent/withDataFetching";
-import DashBoardHeadings from "../../Shared/DashBoardHeading";
+import DashBoardHeadings from "./DashBoardHeading";
+import { AuthContext } from "../../../context/AuthContext";
 
-const URL = "http://localhost:3000/api/v1/quiz/admin/upcoming?limit=4";
-
-const UpcomingQuizzes = memo(({ data }) => {
-  if (data.quiz.length === 0) return <div>No Upcoming Quizzes</div>;
+export const UpcomingQuizzes = memo(({ data }) => {
+  const { role } = useContext(AuthContext);
+  if (data.quiz.length === 0)
+    return (
+      <div className="flex flex-col items-center justify-center text-gray-600 text-center p-6 bg-gray-100 border border-gray-200 rounded-lg shadow-md">
+        <IoCalendarClearOutline className="text-6xl text-gray-400 mb-4" />
+        <p className="text-lg">
+          You don't have any quizzes in the upcoming section...
+        </p>
+        <Link
+          to={`/${role}/quizzes/createQuiz`}
+          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700 transition duration-300">
+          Create New Quiz
+        </Link>
+      </div>
+    );
 
   return (
     <div className="p-6 bg-gray-800 border-2 rounded-md shadow-sm xl:w-fit w-full">
-      <DashBoardHeadings heading="Upcoming Quizzes" path="Show All" />
+      <DashBoardHeadings
+        heading="Upcoming Quizzes"
+        path="Show All"
+        link="/admin/quizzes"
+      />
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {data.quiz.map((quiz) => (
           <Link
             key={quiz.id}
-            to={`/quiz/${quiz.id}`}
+            to={`${role}/quizzes/${quiz.id}`}
             className="block p-4 bg-white hover:bg-blue-50 shadow-lg rounded-lg transition-all duration-200 ease-in-out">
             <div className="flex items-center">
               <img
@@ -47,9 +64,3 @@ const UpcomingQuizzes = memo(({ data }) => {
     </div>
   );
 });
-
-const AdminUpcomingQuizzes = withDataFetching(UpcomingQuizzes, {
-  URL,
-  queryKey: ["upcoming", "quizzes"],
-});
-export default AdminUpcomingQuizzes;

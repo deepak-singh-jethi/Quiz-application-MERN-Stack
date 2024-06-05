@@ -53,6 +53,9 @@ export const action = async ({ request }) => {
 
   localStorage.setItem("token", resData.data.token);
   localStorage.setItem("role", resData.data.user.role);
+  localStorage.setItem("name", resData.data.user.name);
+  localStorage.setItem("email", resData.data.user.email);
+  localStorage.setItem("id", resData.data.user.id);
 
   return redirect("/");
 };

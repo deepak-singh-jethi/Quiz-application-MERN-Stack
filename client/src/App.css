@@ -1,0 +1,76 @@
+.modal {
+    margin: 0;
+    position: fixed;
+    top: 30vh;
+    left: calc(50% - 15rem);
+    border: none;
+    border-radius: 6px;
+    z-index: 1001;
+    /* Adjusted z-index to ensure it appears above the backdrop */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    animation: slide-down-fade-in 300ms ease-out forwards;
+}
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    /* Ensure it is behind the modal */
+}
+
+@keyframes slide-down-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(-3rem);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+@media (max-width: 440px) {
+    .modal {
+        width: 90%;
+        left: 5%;
+        top: 20vh;
+        padding: 1rem;
+        left: calc(50% -10rem);
+    }
+}
+
+@media (max-width: 640px) and (min-width: 441px) {
+    .modal {
+        width: 90%;
+        left: 5%;
+        top: 20vh;
+        padding: 1rem;
+    }
+}
+
+/* Media query for medium screens */
+@media (min-width: 641px) and (max-width: 1024px) {
+    .modal {
+        width: 70%;
+        left: 15%;
+        top: 25vh;
+        padding: 1.5rem;
+    }
+}
+
+/* Media query for large screens */
+@media (min-width: 1025px) {
+    .modal {
+        width: 30rem;
+        left: calc(50% - 15rem);
+        top: 30vh;
+        padding: 2rem;
+    }
+}

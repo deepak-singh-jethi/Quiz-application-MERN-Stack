@@ -5,7 +5,7 @@ const User = require("../Models/UserModel");
 const APIFeatures = require("../utils/APIFeatures");
 const Question = require("../Models/QuestionModel");
 
-// create a quiz //!note => without qus
+// ! create a quiz
 exports.createQuiz = catchAsyncError(async (req, res, next) => {
   const id = req.user.id;
   const { name, duration, perQusMarks, numberOfQus, topics } = req.body;
@@ -28,7 +28,7 @@ exports.createQuiz = catchAsyncError(async (req, res, next) => {
 exports.getQuiz = catchAsyncError(async (req, res, next) => {
   const quiz = await Quiz.findById(req.params.id).populate({
     path: "questions",
-    select: "question options",
+    select: "question options correctAnswer",
   });
 
   if (!quiz) {
@@ -62,8 +62,28 @@ exports.getAllQuiz = catchAsyncError(async (req, res, next) => {
   });
 });
 
-// * get All unpublished Quizzes for admin
+// * get all quizzes created By a admin
+exports.getMyCreatedQuizzes = catchAsyncError(async (req, res, next) => {
+  const feature = new APIFeatures(
+    Quiz.find({ createdBy: req.user.id }),
+    req.query
+  )
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+  const quiz = await feature.query;
 
+  res.status(200).json({
+    status: "success",
+    length: quiz.length,
+    data: {
+      quiz,
+    },
+  });
+});
+
+// * get All unpublished Quizzes for admin
 exports.getAllUnPublishedQuiz = catchAsyncError(async (req, res, next) => {
   const feature = new APIFeatures(Quiz.find({ isPublished: false }), req.query)
     .filter()
@@ -80,6 +100,52 @@ exports.getAllUnPublishedQuiz = catchAsyncError(async (req, res, next) => {
     },
   });
 });
+
+// * getAll quizzes which are published by a instructor
+exports.getAllPublishedQuizByInstructor = catchAsyncError(
+  async (req, res, next) => {
+    const feature = new APIFeatures(
+      Quiz.find({ isPublished: true, createdBy: req.user.id }),
+      req.query
+    )
+      .filter()
+      .sort()
+      .limitFields()
+      .paginate();
+    const quiz = await feature.query;
+
+    res.status(200).json({
+      status: "success",
+      length: quiz.length,
+      data: {
+        quiz,
+      },
+    });
+  }
+);
+
+// * get all quizzes which are not published by a instructor
+exports.getAllUnPublishedQuizByInstructor = catchAsyncError(
+  async (req, res, next) => {
+    const feature = new APIFeatures(
+      Quiz.find({ isPublished: false, createdBy: req.user.id }),
+      req.query
+    )
+      .filter()
+      .sort()
+      .limitFields()
+      .paginate();
+    const quiz = await feature.query;
+
+    res.status(200).json({
+      status: "success",
+      length: quiz.length,
+      data: {
+        quiz,
+      },
+    });
+  }
+);
 
 // * update a quiz
 exports.updateQuiz = catchAsyncError(async (req, res, next) => {
@@ -131,7 +197,7 @@ exports.deleteQuiz = catchAsyncError(async (req, res, next) => {
   });
 });
 
-// * middleware related to questions
+// ! middleware related to questions
 
 //  * adding questions
 exports.addQuestion = catchAsyncError(async (req, res, next) => {

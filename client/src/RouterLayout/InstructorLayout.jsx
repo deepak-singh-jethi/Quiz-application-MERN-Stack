@@ -2,7 +2,7 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import MainLayout from "../components/ui/MainLayout";
 
-const UserLayout = () => {
+const InstructorLayout = () => {
   return (
     <MainLayout>
       <Outlet />
@@ -10,4 +10,4 @@ const UserLayout = () => {
   );
 };
 
-export default UserLayout;
+export default InstructorLayout;

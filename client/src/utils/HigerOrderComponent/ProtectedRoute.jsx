@@ -5,8 +5,11 @@ import { useNavigate } from "react-router-dom";
 const ProtectedRoute = ({ element, expectedRoles }) => {
   const { login } = useContext(AuthContext);
 
-  const token = localStorage.getItem("token");
-  const role = localStorage.getItem("role");
+  let token = localStorage.getItem("token");
+  let role = localStorage.getItem("role");
+  let name = localStorage.getItem("name");
+  let email = localStorage.getItem("email");
+  let id = localStorage.getItem("id");
 
   const navigate = useNavigate();
   const isRoleExist = expectedRoles.includes(role);
@@ -18,7 +21,7 @@ const ProtectedRoute = ({ element, expectedRoles }) => {
       navigate("/notAuthorized");
     }
     if (token && role) {
-      login(token, role);
+      login(token, role, name, email, id);
     }
   }, [token, role]);
 

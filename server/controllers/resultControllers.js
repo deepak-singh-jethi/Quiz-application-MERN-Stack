@@ -17,8 +17,8 @@ exports.createResult = catchAsyncError(async (req, res, next) => {
   }
 
   // TODO check if user has already attempted the quiz
+
   // till then handle from the frontend => if user has already submitted the quiz don't give him route to attempt the quiz
-  // const existingResult = await Result.findOne({ user: userId, quiz: quizId });
 
   // Calculate score
   let score = 0;
