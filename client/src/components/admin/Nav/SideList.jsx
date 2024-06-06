@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { FiHome, FiLayers, FiUsers, FiBarChart2 } from "react-icons/fi";
 
@@ -10,32 +10,44 @@ const SideBarSpan = ({ title }) => {
   return <span className="text-xl mr-4">{title}</span>;
 };
 
-const AdminSideList = ({ isOpen, role }) => {
+const AdminSideList = ({ isOpen, role, toggleSidebar }) => {
+  const navigate = useNavigate();
+  const handleNavigate = (link) => {
+    toggleSidebar(false);
+    navigate(link);
+  };
+
   return (
     <ul className="space-y-8 md:space-y-12 flex flex-col justify-center items-center ">
       {/* Links */}
       {/* Dashboard */}
-      <Link to="/" className={liStyle}>
+      <li onClick={() => handleNavigate("/")} className={liStyle}>
         <FiHome className="text-2xl" />
         {isOpen && <SideBarSpan title={"Dashboard"} />}
-      </Link>
+      </li>
       {/* Quizzes */}
-      <Link to={`/${role}/quizzes`} className={liStyle}>
+      <li
+        onClick={() => handleNavigate(`/${role}/quizzes`)}
+        className={liStyle}>
         <FiLayers className="text-2xl" />
         {isOpen && <SideBarSpan title={"Quizzes"} />}
-      </Link>
+      </li>
       {/* Students */}
       {role === "admin" && (
-        <Link to={`/${role}/students`} className={liStyle}>
+        <li
+          onClick={() => handleNavigate(`/${role}/students`)}
+          className={liStyle}>
           <FiUsers className="text-2xl" />
           {isOpen && <SideBarSpan title={"Students"} />}
-        </Link>
+        </li>
       )}
       {/* Results */}
-      <Link to={`/${role}/results`} className={liStyle}>
+      <li
+        onClick={() => handleNavigate(`/${role}/results`)}
+        className={liStyle}>
         <FiBarChart2 className="text-2xl" />
         {isOpen && <SideBarSpan title={"Results"} />}
-      </Link>
+      </li>
     </ul>
   );
 };

@@ -20,7 +20,7 @@ import UserLayout from "./RouterLayout/UserLayout.jsx";
 import InstructorLayout from "./RouterLayout/InstructorLayout.jsx";
 //
 
-import QuizDetails from "./components/Instructor/Quiz/QuizDetails.jsx";
+import QuizDetails from "./components/Quiz/QuizDetails.jsx";
 
 //
 import ErrorPage from "./components/ui/ErrorPage.jsx";

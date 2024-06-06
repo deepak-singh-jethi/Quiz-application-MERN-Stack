@@ -5,7 +5,7 @@ import { authorizedCreator, queryClient } from "../../../utils/http";
 import { useNavigate } from "react-router";
 import { AuthContext } from "../../../context/AuthContext";
 
-import QuizInput from "./QuizInput";
+import QuizInput from "../QuizInput";
 import Button1 from "../../ui/Button1";
 
 const AddNewQus = ({ addQuestion, onCancel, quiz }) => {

@@ -1,22 +1,11 @@
 import React, { memo, useCallback } from "react";
-import {
-  FiHelpCircle,
-  FiHome,
-  FiLayers,
-  FiUsers,
-  FiBarChart2,
-  FiLogOut,
-} from "react-icons/fi";
+import { FiHelpCircle, FiLogOut } from "react-icons/fi";
 import { FaWindowClose } from "react-icons/fa";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import AdminSideList from "../admin/Nav/SideList";
 import UserSideList from "../users/nav/UserSideList";
 import InstructorSideList from "../Instructor/Nav/SideList";
-
-const SideBarSpan = memo(({ title }) => {
-  return <span className="text-xl mr-4">{title}</span>;
-});
 
 const SideBar = memo(({ isOpen, toggleSidebar }) => {
   const { logout, role } = useContext(AuthContext);
@@ -33,6 +22,7 @@ const SideBar = memo(({ isOpen, toggleSidebar }) => {
       } transition-transform duration-300 ease-in-out bg-gray-800 text-white flex flex-col justify-between overflow-x-hidden z-50`}
       onMouseEnter={() => toggleSidebar(true)}
       onMouseLeave={() => toggleSidebar(false)}>
+      {/* Close side bar button for mobile */}
       <div className="p-4 flex justify-end md:hidden">
         <button
           className="focus:outline-none  "
@@ -45,14 +35,30 @@ const SideBar = memo(({ isOpen, toggleSidebar }) => {
       {/* Sidebar content */}
       <nav className="p-4 mt-4 sm:mt-6 md:mt-24">
         {/* for admin */}
-        {role === "admin" && <AdminSideList isOpen={isOpen} role={role} />}
+        {role === "admin" && (
+          <AdminSideList
+            isOpen={isOpen}
+            role={role}
+            toggleSidebar={toggleSidebar}
+          />
+        )}
 
         {/* for users */}
-        {role === "user" && <UserSideList isOpen={isOpen} role={role} />}
+        {role === "user" && (
+          <UserSideList
+            isOpen={isOpen}
+            role={role}
+            toggleSidebar={toggleSidebar}
+          />
+        )}
 
         {/* for instructor */}
         {role === "instructor" && (
-          <InstructorSideList isOpen={isOpen} role={role} />
+          <InstructorSideList
+            isOpen={isOpen}
+            role={role}
+            toggleSidebar={toggleSidebar}
+          />
         )}
       </nav>
 

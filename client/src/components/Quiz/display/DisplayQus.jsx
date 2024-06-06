@@ -3,7 +3,7 @@ import React, { memo, useCallback, useContext, useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
-import { authorizedRemover, queryClient } from "../../../utils/http";
+import { authorizedRemover, queryClient } from "../../../utils/http.js";
 import { AuthContext } from "../../../context/AuthContext.jsx";
 import Modal from "../../ui/Modal.jsx";
 

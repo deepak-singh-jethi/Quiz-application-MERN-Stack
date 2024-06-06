@@ -14,7 +14,7 @@ const AdminDashboard = () => {
   return (
     <MainLayout>
       <main className="flex flex-col gap-4 my-4">
-        <div className="flex flex-wrap justify-center   gap-3  mx-auto mt-5">
+        <div className="flex  justify-center gap-3  mx-auto mt-5">
           <AdminUpcomingQuizzes />
           {role === "admin" && <AdminStudentsList />}
         </div>
@@ -33,7 +33,7 @@ const AdminTeachersList = withDataFetching(TeachersList, {
 });
 
 const AdminNewQuizzesList = withDataFetching(NewQuizzesList, {
-  queryKey: ["new_5_quiz"],
+  queryKey: ["new_6_quiz"],
   URL: "http://localhost:3000/api/v1/quiz?limit=6",
 });
 

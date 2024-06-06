@@ -7,6 +7,7 @@ const MainLayout = memo(({ children }) => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   const toggleSidebar = (open) => {
+    console.log(open);
     setSidebarOpen(open);
   };
 
@@ -14,6 +15,7 @@ const MainLayout = memo(({ children }) => {
     <div className="md:ml-24">
       <SideBar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
       <nav className="flex justify-between items-center px-2 sm:px-10 w-full py-3 border-b-2 ">
+        {/* for mobile hamburger button */}
         {!isSidebarOpen && (
           <div className="px-1 sm:px-2 md:px-4 md:hidden inline-block">
             <button

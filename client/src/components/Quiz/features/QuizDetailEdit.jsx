@@ -1,5 +1,5 @@
 import React from "react";
-import QuizInput from "./QuizInput";
+import QuizInput from "../QuizInput";
 import Button1 from "../../ui/Button1";
 import { FaSave } from "react-icons/fa";
 

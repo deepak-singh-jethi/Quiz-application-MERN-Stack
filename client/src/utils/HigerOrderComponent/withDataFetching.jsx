@@ -13,7 +13,6 @@ const withDataFetching = (WrappedComponent, { URL, queryKey }) => {
     const { data, isLoading, isError, error } = useQuery({
       queryKey: queryKey,
       queryFn: ({ signal }) => authorizedFetcher({ signal, URL, token }),
-      staleTime: 10000,
     });
 
     if (isLoading) return <Loading />;

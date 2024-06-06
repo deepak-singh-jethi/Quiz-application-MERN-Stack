@@ -1,8 +1,8 @@
 import React, { memo, useCallback } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
-import EditingView from "./EditingView";
-import DisplayView from "./DisplayView";
+import EditingView from "./features/EditingQus";
+import DisplayView from "./display/DisplayQus";
 
 const QuestionCard = ({ question, questionState, setQuestionState }) => {
   const { isEditing, isExpanded, questionId } = questionState;

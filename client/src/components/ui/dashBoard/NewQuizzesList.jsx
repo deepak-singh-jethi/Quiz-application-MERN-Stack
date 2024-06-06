@@ -10,7 +10,7 @@ export const NewQuizzesList = ({ data }) => {
 
   if (!data || !data.quiz || data.quiz.length === 0)
     return (
-      <div className="flex flex-col items-center justify-center text-gray-600 text-center p-6 bg-gray-100 border border-gray-200 rounded-lg shadow-md">
+      <div className="flex flex-col items-center justify-center text-gray-600 text-center p-6 bg-gray-800 border border-gray-200 rounded-lg shadow-md">
         <IoCalendarClearOutline className="text-6xl text-gray-400 mb-4" />
         <p className="text-lg">You don't have any live quizzes...</p>
         <Link
