@@ -5,7 +5,6 @@ const questionSchema = new mongoose.Schema(
     question: {
       type: String,
       required: [true, "Question must have some text"],
-      unique: [true, "This question already exists"],
     },
     options: {
       type: [String],

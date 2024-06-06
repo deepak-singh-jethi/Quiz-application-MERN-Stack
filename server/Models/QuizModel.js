@@ -26,10 +26,11 @@ const QuizSchema = new mongoose.Schema(
       required: [true, "Duration Can't be empty"],
     },
 
-    numberOfQus: {
-      type: Number,
-      required: [true, "Number of Questions Can't be empty"],
-    },
+    // numberOfQus: {
+    //   type: Number,
+    //   required: [true, "Number of Questions Can't be empty"],
+    // },
+
     perQusMarks: {
       type: Number,
       required: [true, "Total Marks Can't be empty"],

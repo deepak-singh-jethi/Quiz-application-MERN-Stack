@@ -1,11 +1,11 @@
 import React, { useCallback, useState } from "react";
 import withDataFetching from "../../../utils/HigerOrderComponent/withDataFetching";
-import { FaEdit, FaSave } from "react-icons/fa";
+import { FaEdit } from "react-icons/fa";
 import { useParams } from "react-router";
-import QuizInput from "./QuizInput";
 import QuestionCard from "./QuestionCard";
 import AddNewQus from "./AddNewQus";
 import Button1 from "../../ui/Button1";
+import QuizDetailEdit from "./QuizDetailEdit";
 
 const Quiz = ({ data }) => {
   const quiz = data.quiz;
@@ -23,54 +23,17 @@ const Quiz = ({ data }) => {
   }, [addNewQusOpen]);
 
   return (
-    <div className="container mx-auto p-6 bg-gradient-to-br from-gray-700 to-gray-900 text-white rounded-lg shadow-md">
+    <div className="container mx-auto md:p-6 p-3 bg-gradient-to-br from-gray-700 to-gray-900 text-white rounded-lg shadow-md">
       <div className="bg-white p-6 rounded-lg shadow-md text-gray-700">
         <div className="flex justify-between items-center">
-          <h2 className="text-3xl font-bold">Quiz Details</h2>
+          <h2 className="text-xl lg:text-3xl font-bold">Quiz Details</h2>
           <FaEdit
             className="cursor-pointer text-blue-500"
             onClick={() => setEditingQuiz(!editingQuiz)}
           />
         </div>
         {editingQuiz ? (
-          <div className="grid grid-cols-2 gap-4 mt-4">
-            <QuizInput
-              label="Name"
-              name="name"
-              value={quizDetails.name}
-              onChange={handleQuizDetailChange}
-            />
-            <QuizInput
-              label="Duration"
-              name="duration"
-              type="number"
-              value={data.quiz.duration}
-              onChange={handleQuizDetailChange}
-            />
-            <QuizInput
-              label="Per Question Marks"
-              name="perQusMarks"
-              type="number"
-              value={data.quiz.perQusMarks}
-              onChange={handleQuizDetailChange}
-            />
-            <QuizInput
-              label="Topics"
-              name="topics"
-              value={data.quiz.topics.join(", ")}
-              onChange={(e) =>
-                handleQuizDetailChange({
-                  target: {
-                    name: "topics",
-                    value: e.target.value.split(", "),
-                  },
-                })
-              }
-            />
-            <Button1 onClick={() => setEditingQuiz(false)}>
-              <FaSave className="inline mr-2" /> Save
-            </Button1>
-          </div>
+          <QuizDetailEdit data={data} setEditingQuiz={setEditingQuiz} />
         ) : (
           <div className="mt-4 space-y-2">
             <p>
