@@ -5,6 +5,7 @@ import { UpcomingQuizzes } from "../../ui/dashBoard/UpcomingQuizzesList";
 import withDataFetching from "../../../utils/HigerOrderComponent/withDataFetching";
 
 import MainLayout from "../../ui/MainLayout";
+import { Link } from "react-router-dom";
 
 const InstructorDashboard = () => {
   const { role, name, email, id, token } = useContext(AuthContext);
@@ -16,15 +17,17 @@ const InstructorDashboard = () => {
         </h1>
         {/* create new with button */}
         <div className="flex gap-4 mx-4">
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          <Link
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            to="instructor/quizzes/createQuiz">
             Create New Quiz
-          </button>
+          </Link>
         </div>
-        <div className="w-full my-4">
-          <InstructorNewQuizzes />
-        </div>
-        <div className="w-full my-4">
+        <div className="w-full my-4 rounded">
           <InstructorUpcomingQuizzes />
+        </div>
+        <div className="w-full my-4 rounded">
+          <InstructorNewQuizzes />
         </div>
       </main>
     </MainLayout>

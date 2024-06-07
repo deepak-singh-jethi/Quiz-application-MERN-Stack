@@ -21,6 +21,7 @@ import InstructorLayout from "./RouterLayout/InstructorLayout.jsx";
 //
 
 import QuizDetails from "./components/Quiz/QuizDetails.jsx";
+import NewQuiz from "./components/Quiz/NewQuiz.jsx";
 
 //
 import ErrorPage from "./components/ui/ErrorPage.jsx";
@@ -53,7 +54,7 @@ const router = createBrowserRouter(
         }>
         <Route path="quizzes" element={<h1>All Quiz</h1>} />
         <Route path="quizzes/:quizId" element={<QuizDetails />} />
-        <Route path="quizzes/createQuiz" element={<h1>Create Quiz Page</h1>} />
+        <Route path="quizzes/createQuiz" element={<NewQuiz />} />
         <Route path="quizzes/editQuiz/:quizId" element={<h1>Edit Quiz</h1>} />
         <Route path="results" element={<h1>Results</h1>} />
         <Route path="results/:id" element={<h1>1 Result</h1>} />
@@ -76,7 +77,7 @@ const router = createBrowserRouter(
         }>
         <Route path="quizzes" element={<h1>Quizzes</h1>} />
         <Route path="quizzes/:quizId" element={<QuizDetails />} />
-        <Route path="quizzes/createQuiz" element={<h1>Create Quiz Page</h1>} />
+        <Route path="quizzes/createQuiz" element={<NewQuiz />} />
         <Route path="quizzes/editQuiz/:quizId" element={<h1>Edit Quiz</h1>} />
 
         <Route path="results" element={<h1>Results</h1>} />

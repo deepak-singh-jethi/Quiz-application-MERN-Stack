@@ -19,7 +19,7 @@ const InstructorSideList = ({ isOpen, role, toggleSidebar }) => {
   return (
     <ul className="space-y-8 md:space-y-12 flex flex-col justify-center items-center ">
       {/* Dashboard */}
-      <li className={liStyle} onClick={() => toggleSidebar(false)}>
+      <li className={liStyle} onClick={() => handleNavigate(`/`)}>
         <FiHome className="text-2xl" />
         {isOpen && <SideBarSpan title={"Dashboard"} />}
       </li>

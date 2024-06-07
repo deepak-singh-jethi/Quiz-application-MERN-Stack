@@ -69,6 +69,8 @@ export async function authorizedCreator({ URL, body, token }) {
     body: JSON.stringify(body),
   });
 
+  console.log(response);
+
   if (!response.ok) {
     const error = await response.json();
     throw new Error(error.message);

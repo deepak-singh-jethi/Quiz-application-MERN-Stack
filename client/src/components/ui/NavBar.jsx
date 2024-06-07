@@ -15,7 +15,7 @@ const NavBar = () => {
         <h1 className="text-lg sm:text-xl  font-bold text-gray-800 hidden md:block ">
           {name.toUpperCase()}
         </h1>
-        <Link className={navBtnClass}>
+        <Link className={navBtnClass} to={`/${role}/quizzes/createQuiz`}>
           <IoAddCircleSharp className="text-lg sm:text-2xl md:text-3xl" />
           Quiz
         </Link>

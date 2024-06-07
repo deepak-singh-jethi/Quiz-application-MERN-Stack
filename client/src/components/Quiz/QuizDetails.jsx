@@ -10,7 +10,7 @@ import Modal from "../ui/Modal";
 import QuizStatusChange from "./features/QuizStatusChange";
 
 const Quiz = ({ data }) => {
-  const quiz = data.quiz;
+  // const quiz = data.quiz;
   const [editingQuiz, setEditingQuiz] = useState(false);
   const [addNewQusOpen, setIsNewQusOpen] = useState(false);
   const [questionState, setQuestionState] = useState({
@@ -37,7 +37,7 @@ const Quiz = ({ data }) => {
           onClose={() => setIsChangeStatusOpen(false)}>
           <QuizStatusChange
             modalClose={handleStatusChange}
-            changeStatusTo={!quiz.isPublished}
+            changeStatusTo={!data.quiz.isPublished}
           />
         </Modal>
       )}
@@ -77,14 +77,14 @@ const Quiz = ({ data }) => {
       {/* add a question form */}
       {addNewQusOpen && (
         <AddNewQus
-          quiz={quiz}
+          quiz={data.quiz}
           setIsNewQusOpen={setIsNewQusOpen}
           onCancel={handleToggleAddNewQus}
         />
       )}
 
       {/* questions card */}
-      {quiz && quiz.questions.length > 0 && (
+      {data.quiz && data.quiz.questions.length > 0 && (
         <div className="mt-6">
           {data.quiz.questions.map((question, qIndex) => (
             <QuestionCard
@@ -96,7 +96,7 @@ const Quiz = ({ data }) => {
           ))}
         </div>
       )}
-      {quiz && quiz.questions.length === 0 && (
+      {data.quiz && data.quiz.questions.length === 0 && (
         <p className="text-center mt-6 font-bold text-2xl">
           No questions added yet.
         </p>

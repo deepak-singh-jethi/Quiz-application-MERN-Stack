@@ -1,93 +1,99 @@
 import React, { useState, useContext } from "react";
 import { FaSave } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
+
+import { useMutation } from "@tanstack/react-query";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   queryClient,
   authorizedCreator,
   authorizedUpdater,
 } from "../../../utils/http";
-import { useMutation } from "@tanstack/react-query";
-import { useNavigate, useParams } from "react-router-dom";
 import QuizInput from "../QuizInput";
 import Button1 from "../../ui/Button1";
 import { AuthContext } from "../../../context/AuthContext";
+import Loading from "../../ui/Loading";
 
 const QuizDetailForm = ({ data, setEditingQuiz, state }) => {
   const { quizId } = useParams();
   const { token, role } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const {
-    mutate: updateQuiz,
-    data: updateData,
-    isPending: updatePending,
-    isError: isErrorOnUpdate,
-    error: updateError,
-  } = useMutation({
-    mutationFn: authorizedUpdater,
-    onSuccess: () => {
+  const [formData, setFormData] = useState({
+    name: data.quiz.name || "",
+    duration: data.quiz.duration || "",
+    perQusMarks: data.quiz.perQusMarks || 1,
+    topics: data.quiz.topics || [],
+  });
+  const [formError, setFormError] = useState("");
+
+  const commonMutationConfig = {
+    onSuccess: (response) => {
+      console.log(response);
       queryClient.invalidateQueries([
         ["live", "quizzes"],
         ["upcoming", "quizzes"],
         ["quiz", { id: quizId }],
       ]);
-      setEditingQuiz(false);
-      navigate(`/admin/quizzes/${quizId}`);
+      if (state === "update") {
+        setEditingQuiz(false);
+        navigate(`/${role}/quizzes/${quizId}`);
+      } else {
+        navigate(`/${role}/quizzes/${response.quiz.id}`);
+      }
     },
+    onError: (error) => {
+      setFormError(error.message || "An error occurred");
+    },
+  };
+
+  const updateQuiz = useMutation({
+    mutationFn: authorizedUpdater,
+    ...commonMutationConfig,
   });
 
-  // TODO create a new quiz using this mutation
-  // const {
-  //   mutate: createQuiz,
-  //   data: createData,
-  //   isPending: createPending,
-  //   isError: isErrorOnCreate,
-  //   error: createError,
-  // } = useMutation({
-  //   mutationFn: authorizedCreator,
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries([
-  //       ["live", "quizzes"],
-  //       ["upcoming", "quizzes"],
-  //     ]);
-  //     navigate("/admin/dashboard");
-  //   },
-  // });
-
-  const {
-    quiz: { name, duration, perQusMarks, topics },
-  } = data;
-  const [formData, setFormData] = useState({
-    name: name || "",
-    duration: duration || 0,
-    perQusMarks: perQusMarks || 1,
-    topics: topics || [],
+  const createQuiz = useMutation({
+    mutationFn: authorizedCreator,
+    ...commonMutationConfig,
   });
-  const [formError, setFormError] = useState("");
 
   const handleSubmit = () => {
-    //handle errors such that no fields can be empty
-
     if (
       !formData.name ||
       !formData.duration ||
+      isNaN(formData.duration) ||
+      formData.duration < 0 ||
       !formData.perQusMarks ||
+      isNaN(formData.perQusMarks) ||
+      formData.perQusMarks < 0 ||
       !formData.topics.join("")
     ) {
       setFormError("Please fill all the fields");
       return;
     }
+
     setFormError("");
+
+    const payload = {
+      URL:
+        state === "update"
+          ? `http://localhost:3000/api/v1/quiz/${quizId}`
+          : "http://localhost:3000/api/v1/quiz",
+      body: formData,
+      token,
+    };
+
     if (state === "update") {
-      updateQuiz({
-        URL: `http://localhost:3000/api/v1/quiz/${quizId}`,
-        body: {
-          ...formData,
-        },
-        token: token,
-      });
+      updateQuiz.mutate(payload);
+    } else {
+      createQuiz.mutate(payload);
     }
   };
+
+  if (updateQuiz.isLoading || createQuiz.isLoading) {
+    return <Loading />;
+  }
+
   return (
     <div>
       <div className="grid grid-cols-2 gap-4 mt-4">
@@ -96,12 +102,9 @@ const QuizDetailForm = ({ data, setEditingQuiz, state }) => {
           name="name"
           value={formData.name}
           placeholder="Enter quiz name"
-          onChange={(e) => {
-            setFormData({
-              ...formData,
-              [e.target.name]: e.target.value,
-            });
-          }}
+          onChange={(e) =>
+            setFormData({ ...formData, [e.target.name]: e.target.value })
+          }
         />
         <QuizInput
           label="Duration in Minutes"
@@ -109,53 +112,59 @@ const QuizDetailForm = ({ data, setEditingQuiz, state }) => {
           type="number"
           value={formData.duration}
           placeholder="Enter quiz duration in Minutes"
-          onChange={(e) => {
-            setFormData({
-              ...formData,
-              [e.target.name]: e.target.value,
-            });
-          }}
+          onChange={(e) =>
+            setFormData({ ...formData, [e.target.name]: e.target.value })
+          }
         />
         <QuizInput
           label="Per Question Marks"
           name="perQusMarks"
           type="number"
           value={formData.perQusMarks}
-          onChange={(e) => {
-            setFormData({
-              ...formData,
-              [e.target.name]: e.target.value,
-            });
-          }}
+          onChange={(e) =>
+            setFormData({ ...formData, [e.target.name]: e.target.value })
+          }
         />
         <QuizInput
           label="Topic (js, Java, Oops)"
           name="topics"
           value={formData.topics.join(", ")}
-          onChange={(e) => {
+          onChange={(e) =>
             setFormData({
               ...formData,
-              topics: e.target.value.trim().split(", "),
-            });
-          }}
+              topics: e.target.value.split(", "),
+            })
+          }
         />
       </div>
-      <div className="h-10 text-center">
-        {formError && <p className="text-red-500 col-span-2">{formError}</p>}
-        {updateError && (
-          <p className="text-red-500 col-span-2">{updateError.message}</p>
+      {formError && (
+        <p className="text-red-500 text-center mt-2">{formError}</p>
+      )}
+      <div className="flex justify-between items-center min-w-full mt-4">
+        {state === "update" ? (
+          <>
+            <button
+              onClick={() => setEditingQuiz(false)}
+              className="bg-orange-500 px-3 py-2 hover:bg-orange-600 text-white rounded">
+              <MdCancel className="inline mr-2" /> Cancel
+            </button>
+            <Button1 onClick={handleSubmit}>
+              <FaSave className="inline mr-2" /> Save
+            </Button1>
+          </>
+        ) : (
+          <>
+            <Link
+              className="bg-orange-500 px-3 py-2 hover:bg-orange-600 text-white rounded"
+              to=".."
+              relative="route">
+              Cancel
+            </Link>
+            <Button1 onClick={handleSubmit}>
+              <FaSave className="inline mr-2" /> Create
+            </Button1>
+          </>
         )}
-        {/* TODO  later add createError also */}
-      </div>
-      <div className="flex justify-between items-center min-w-full">
-        <button
-          onClick={() => setEditingQuiz(false)}
-          className="bg-orange-500 px-3 py-2 hover:bg-orange-600 text-white rounded">
-          <MdCancel className="inline mr-2" /> Cancel
-        </button>
-        <Button1 onClick={handleSubmit}>
-          <FaSave className="inline mr-2" /> Save
-        </Button1>
       </div>
     </div>
   );
