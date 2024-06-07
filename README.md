@@ -5,6 +5,20 @@
 
 This repository contains a quiz application built using the MERN stack (MongoDB, Express.js, React, and Node.js). Follow the steps below to set up and run the project:
 
+## Features
+
+- **User Authentication**: Users can sign up, log in, and log out.
+- **Quiz Management**:
+  - Create, edit, and delete quizzes.
+  - View quiz details and questions.
+- **Taking Quizzes**:
+  - Users can take quizzes and view their scores.
+  - Questions are presented one at a time.
+  - Scores are calculated based on correct answers.
+- **Admin Panel**:
+  - Admins can manage questions and quizzes.
+  - Add new questions, edit existing ones, and organize quizzes.
+
 ## Prerequisites
 
 1. **Node.js**: Make sure you have Node.js installed on your system. You can download it from [here](https://nodejs.org/).
