@@ -174,13 +174,17 @@ exports.deleteQuiz = catchAsyncError(async (req, res, next) => {
     return next(new AppError("Password is required", 400));
   }
 
-  // * get admin data from database
-  const admin = await User.findById(req.user.id).select("+password");
+  // // * get admin data from database
+  // const admin = await User.findById(req.user.id).select("+password");
 
-  // * compare admin password with the given password
-  if (!admin || !(await admin.isPasswordCorrect(password, admin.password))) {
-    return next(new AppError("Invalid password", 401));
-  }
+  // // * compare admin password with the given password
+  // if (!admin || !(await admin.isPasswordCorrect(password, admin.password))) {
+  //   return next(new AppError("Invalid password", 401));
+  // }
+
+  // TODO delete all the questions related to the quiz
+
+  // TODO delete all the results related to the quiz
 
   const quiz = await Quiz.findByIdAndDelete(quizId);
 

@@ -13,13 +13,15 @@ const AdminDashboard = () => {
   const { role } = useContext(AuthContext);
   return (
     <MainLayout>
-      <main className="flex flex-col gap-4 my-4">
-        <div className="flex  justify-center gap-3  mx-auto mt-5">
-          <AdminUpcomingQuizzes />
-          {role === "admin" && <AdminStudentsList />}
-        </div>
-        <div className="flex gap-3 min-[850px]:flex-nowrap flex-wrap mt-5 justify-center mx-4">
+      <main className="container mx-auto">
+        <div className="w-full my-4">
           <AdminNewQuizzesList />
+        </div>
+        <div className="w-full my-4">
+          <AdminUpcomingQuizzes />
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6 h-full">
+          {role === "admin" && <AdminStudentsList />}
           {role === "admin" && <AdminTeachersList />}
         </div>
       </main>
@@ -33,12 +35,12 @@ const AdminTeachersList = withDataFetching(TeachersList, {
 });
 
 const AdminNewQuizzesList = withDataFetching(NewQuizzesList, {
-  queryKey: ["new_6_quiz"],
-  URL: "http://localhost:3000/api/v1/quiz?limit=6",
+  queryKey: ["live", "quizzes"],
+  URL: "http://localhost:3000/api/v1/quiz?limit=8",
 });
 
 const AdminUpcomingQuizzes = withDataFetching(UpcomingQuizzes, {
-  URL: "http://localhost:3000/api/v1/quiz/admin/upcoming?limit=4",
+  URL: "http://localhost:3000/api/v1/quiz/admin/upcoming?limit=5",
   queryKey: ["upcoming", "quizzes"],
 });
 

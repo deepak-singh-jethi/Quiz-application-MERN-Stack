@@ -20,10 +20,10 @@ const InstructorDashboard = () => {
             Create New Quiz
           </button>
         </div>
-        <div className="mx-4">
+        <div className="w-full my-4">
           <InstructorNewQuizzes />
         </div>
-        <div className="mx-4">
+        <div className="w-full my-4">
           <InstructorUpcomingQuizzes />
         </div>
       </main>

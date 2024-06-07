@@ -12,7 +12,7 @@ export const TeachersList = ({ data }) => {
   }
 
   return (
-    <div className="p-4 bg-gray-800 border border-gray-200 rounded-lg shadow-sm xl:w-fit w-full md:basis-1/4 mt-6">
+    <div className="p-4 bg-gray-800 border border-gray-200 rounded-lg shadow-sm  w-full  mt-6 h-full">
       {/* card heading */}
       <DashBoardHeadings
         heading="Teachers"

@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { queryClient, authorizedUpdater } from "../../utils/http";
+import { queryClient, authorizedUpdater } from "../../../utils/http";
 import { useNavigate, useParams } from "react-router";
-import { AuthContext } from "../../context/AuthContext";
+import { AuthContext } from "../../../context/AuthContext";
 
-const QuizStatus = ({ modalClose, changeStatusTo }) => {
+const QuizStatusChange = ({ modalClose, changeStatusTo }) => {
   const { quizId } = useParams();
   const { token } = useContext(AuthContext);
   const { mutate, isPending, isError, error } = useMutation({
@@ -31,11 +31,11 @@ const QuizStatus = ({ modalClose, changeStatusTo }) => {
       <button
         className={`px-4 py-2 rounded ${
           changeStatusTo
-            ? "bg-red-500 hover:bg-red-600"
-            : "bg-green-500 hover:bg-green-600"
+            ? "bg-[#23C55E] hover:bg-green-600"
+            : "bg-red-500 hover:bg-red-600"
         } text-white`}
         onClick={handleUpdate}>
-        {`${changeStatusTo ? "Hide Quiz" : "Make Public"}`}
+        {`${changeStatusTo ? "Make Public" : "Hide Quiz"}`}
       </button>
       <button
         className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-gray-800"
@@ -68,4 +68,4 @@ const QuizStatus = ({ modalClose, changeStatusTo }) => {
   );
 };
 
-export default QuizStatus;
+export default QuizStatusChange;

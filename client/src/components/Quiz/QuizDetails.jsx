@@ -4,10 +4,10 @@ import { FaEdit } from "react-icons/fa";
 import { useParams } from "react-router";
 import QuestionCard from "./QuestionCard";
 import AddNewQus from "./features/AddNewQus";
-import QuizDetailEdit from "./features/QuizDetailEdit";
+import QuizDetailForm from "./features/QuizDetailForm";
 import QuizInfo from "./display/QuizInfo";
 import Modal from "../ui/Modal";
-import QuizStatus from "./features/QuizStatus";
+import QuizStatusChange from "./features/QuizStatusChange";
 
 const Quiz = ({ data }) => {
   const quiz = data.quiz;
@@ -35,7 +35,7 @@ const Quiz = ({ data }) => {
         <Modal
           isOpen={isChangeStatusOpen}
           onClose={() => setIsChangeStatusOpen(false)}>
-          <QuizStatus
+          <QuizStatusChange
             modalClose={handleStatusChange}
             changeStatusTo={!quiz.isPublished}
           />
@@ -45,16 +45,17 @@ const Quiz = ({ data }) => {
         <div className="flex justify-between items-center">
           <h2 className="text-xl lg:text-3xl font-bold">Quiz Details</h2>
           <FaEdit
-            className="cursor-pointer text-blue-500"
+            className="cursor-pointer text-blue-500 text-2xl hover:text-blue-700"
             onClick={() => setEditingQuiz(!editingQuiz)}
           />
         </div>
         {editingQuiz ? (
           // edit quiz details
-          <QuizDetailEdit
+          <QuizDetailForm
             data={data}
             setEditingQuiz={setEditingQuiz}
             setIsChangeStatusOpen={setIsChangeStatusOpen}
+            state="update"
           />
         ) : (
           // quiz details info
@@ -68,7 +69,7 @@ const Quiz = ({ data }) => {
       <div className="text-center w-full mt-5 mb-4">
         <button
           onClick={handleToggleAddNewQus}
-          className="py-2 px-3  bg-emerald-300 hover:bg-emerald-400  rounded transition duration-300 ease-in-out w-fit text-gray-800">
+          className="py-2 px-3  bg-[#23C55E] hover:bg-[#59d185] text-stone-100  rounded transition duration-300 ease-in-out w-fit ">
           {`${addNewQusOpen ? "Close" : "Add Question"}`}
         </button>
       </div>

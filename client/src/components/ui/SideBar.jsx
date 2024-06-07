@@ -1,18 +1,21 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useContext } from "react";
 import { FiHelpCircle, FiLogOut } from "react-icons/fi";
 import { FaWindowClose } from "react-icons/fa";
-import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import AdminSideList from "../admin/Nav/SideList";
 import UserSideList from "../users/nav/UserSideList";
 import InstructorSideList from "../Instructor/Nav/SideList";
+import { useNavigate } from "react-router";
 
 const SideBar = memo(({ isOpen, toggleSidebar }) => {
+  const navigate = useNavigate();
   const { logout, role } = useContext(AuthContext);
 
   // handling logout
   const handleLogout = useCallback(() => {
+    console.log("log out");
     logout();
+    return navigate("/auth");
   }, []);
 
   return (

@@ -22,7 +22,6 @@ export async function authorizedFetcher({ signal, URL, token }) {
   return data;
 }
 export async function authorizedUpdater({ URL, body, token }) {
-  console.log({ URL, body, token });
   const response = await fetch(URL, {
     method: "PATCH",
     headers: {
