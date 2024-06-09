@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { FiHome, FiLayers, FiUsers, FiBarChart2 } from "react-icons/fi";
@@ -52,4 +52,4 @@ const AdminSideList = ({ isOpen, role, toggleSidebar }) => {
   );
 };
 
-export default AdminSideList;
+export default memo(AdminSideList);

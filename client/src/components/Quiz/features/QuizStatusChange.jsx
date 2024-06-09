@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { memo, useContext } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { queryClient, authorizedUpdater } from "../../../utils/http";
 import { useNavigate, useParams } from "react-router";
@@ -10,9 +10,14 @@ const QuizStatusChange = ({ modalClose, changeStatusTo }) => {
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: authorizedUpdater,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["new_6_quiz"] });
-      queryClient.invalidateQueries({ queryKey: ["upcoming", "quizzes"] });
-      queryClient.invalidateQueries({ queryKey: ["quiz", { id: quizId }] });
+      queryClient.invalidateQueries([
+        ["AllLiveQuizzes"],
+        ["AllUpcomingQuizzes"],
+        ["AllResultedQuizzes"],
+        ["6-live-quizzes"],
+        ["5-upcoming-quizzes"],
+        ["quiz", { id: quizId }],
+      ]);
 
       modalClose();
     },
@@ -68,4 +73,4 @@ const QuizStatusChange = ({ modalClose, changeStatusTo }) => {
   );
 };
 
-export default QuizStatusChange;
+export default memo(QuizStatusChange);

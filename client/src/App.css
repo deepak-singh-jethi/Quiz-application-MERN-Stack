@@ -20,7 +20,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.8);
     z-index: 1000;
     /* Ensure it is behind the modal */
 }

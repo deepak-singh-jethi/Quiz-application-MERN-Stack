@@ -83,4 +83,4 @@ const QuestionCard = ({ question, questionState, setQuestionState }) => {
   );
 };
 
-export default QuestionCard;
+export default memo(QuestionCard);

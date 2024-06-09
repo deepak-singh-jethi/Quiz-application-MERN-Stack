@@ -64,7 +64,7 @@ exports.getAllQuiz = catchAsyncError(async (req, res, next) => {
   });
 });
 
-// * get all quizzes created By a admin
+// * get all quizzes created for a admin
 exports.getMyCreatedQuizzes = catchAsyncError(async (req, res, next) => {
   const feature = new APIFeatures(
     Quiz.find({ createdBy: req.user.id }),
@@ -74,7 +74,10 @@ exports.getMyCreatedQuizzes = catchAsyncError(async (req, res, next) => {
     .sort()
     .limitFields()
     .paginate();
-  const quiz = await feature.query;
+  const quiz = await feature.query.populate({
+    path: "createdBy",
+    select: "name",
+  });
 
   res.status(200).json({
     status: "success",
@@ -92,7 +95,11 @@ exports.getAllUnPublishedQuiz = catchAsyncError(async (req, res, next) => {
     .sort()
     .limitFields()
     .paginate();
-  const quiz = await feature.query;
+
+  const quiz = await feature.query.populate({
+    path: "createdBy",
+    select: "name",
+  });
 
   res.status(200).json({
     status: "success",

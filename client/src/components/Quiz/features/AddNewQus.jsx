@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, memo } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { authorizedCreator, queryClient } from "../../../utils/http";
 import { useNavigate } from "react-router";
@@ -120,4 +120,4 @@ const AddNewQus = ({ addQuestion, onCancel, quiz }) => {
   );
 };
 
-export default AddNewQus;
+export default memo(AddNewQus);

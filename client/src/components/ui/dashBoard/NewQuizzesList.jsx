@@ -5,9 +5,8 @@ import { IoCalendarClearOutline } from "react-icons/io5";
 
 import DashBoardHeadings from "./DashBoardHeading.jsx";
 
-export const NewQuizzesList = ({ data }) => {
+export const NewQuizzesList = ({ data, hideText }) => {
   const { role } = useContext(AuthContext);
-
   if (!data || !data.quiz || data.quiz.length === 0)
     return (
       <div className="flex flex-col items-center justify-center text-gray-600 text-center p-2 bg-gray-800 border border-gray-200 rounded-lg shadow-md w-full">
@@ -25,9 +24,10 @@ export const NewQuizzesList = ({ data }) => {
     <div className="md:p-6 p-3 bg-gray-800 border border-gray-200 rounded-lg shadow-sm mt-6 w-full ">
       {/* heading area */}
       <DashBoardHeadings
-        heading="Ongoing Quizzes"
+        heading="Live Quizzes"
         path="Show more.."
-        link="admin/quizzes"
+        link={`${role}/quizzes`}
+        hideText={hideText}
       />
 
       {/* cards area */}
@@ -76,11 +76,17 @@ export const NewQuizzesList = ({ data }) => {
                 <span className="font-bold text-black">Attempted by:</span>{" "}
                 {quiz.numberOfStudents} Students
               </p>
+              {quiz.createdBy.name && (
+                <p className="text-xs text-gray-600 mb-2">
+                  <span className="font-bold text-black">Created by:</span>{" "}
+                  {quiz.createdBy.name}
+                </p>
+              )}
               {/* quiz details */}
             </div>
             <div className="mt-2 text-right">
               <Link
-                to={`${role}/quizzes/${quiz.id}`}
+                to={`/${role}/quizzes/${quiz.id}`}
                 className="inline-block bg-[#1F2937] text-white py-1 sm:py-2 px-2 rounded-lg hover:bg-[#2d3642] transition duration-200">
                 Quiz Details
               </Link>

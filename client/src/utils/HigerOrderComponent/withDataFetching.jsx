@@ -6,7 +6,10 @@ import ErrorBlock from "../../components/ui/ErrorBlock";
 import { AuthContext } from "../../context/AuthContext";
 import { authorizedFetcher } from "../http";
 
-const withDataFetching = (WrappedComponent, { URL, queryKey }) => {
+const withDataFetching = (
+  WrappedComponent,
+  { URL, queryKey, additionalProps = {} }
+) => {
   return (props) => {
     const { token } = useContext(AuthContext);
 
@@ -20,7 +23,7 @@ const withDataFetching = (WrappedComponent, { URL, queryKey }) => {
     if (isError) return <ErrorBlock message={error.message} />;
 
     // Pass the data and other props to the wrapped component
-    return <WrappedComponent data={data} {...props} />;
+    return <WrappedComponent data={data} {...props} {...additionalProps} />;
   };
 };
 

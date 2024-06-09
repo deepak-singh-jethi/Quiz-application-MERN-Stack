@@ -1,11 +1,14 @@
-import React, { memo, useCallback, useContext } from "react";
+import React, { memo, useCallback, useContext, lazy, Suspense } from "react";
 import { FiHelpCircle, FiLogOut } from "react-icons/fi";
 import { FaWindowClose } from "react-icons/fa";
 import { AuthContext } from "../../context/AuthContext";
-import AdminSideList from "../admin/Nav/SideList";
-import UserSideList from "../users/nav/UserSideList";
-import InstructorSideList from "../Instructor/Nav/SideList";
 import { useNavigate } from "react-router";
+
+// Lazy load subcomponents
+
+const AdminSideList = lazy(() => import("../admin/Nav/SideList"));
+const UserSideList = lazy(() => import("../users/nav/UserSideList"));
+const InstructorSideList = lazy(() => import("../Instructor/Nav/SideList"));
 
 const SideBar = memo(({ isOpen, toggleSidebar }) => {
   const navigate = useNavigate();
@@ -16,53 +19,52 @@ const SideBar = memo(({ isOpen, toggleSidebar }) => {
     console.log("log out");
     logout();
     return navigate("/auth");
-  }, []);
+  }, [logout, navigate]);
 
   return (
     <aside
       className={`fixed inset-y-0 left-0 transform ${
-        isOpen ? "w-[250px] " : " md:w-[100px] w-[0px]"
+        isOpen ? "w-[250px]" : "md:w-[100px] w-[0px]"
       } transition-transform duration-300 ease-in-out bg-gray-800 text-white flex flex-col justify-between overflow-x-hidden z-50`}
       onMouseEnter={() => toggleSidebar(true)}
       onMouseLeave={() => toggleSidebar(false)}>
       {/* Close side bar button for mobile */}
       <div className="p-4 flex justify-end md:hidden">
         <button
-          className="focus:outline-none  "
+          className="focus:outline-none"
           aria-label="Close Menu"
           onClick={() => toggleSidebar(false)}>
-          <FaWindowClose className="text-2xl  hover:text-red-500 text-red-700" />
+          <FaWindowClose className="text-2xl hover:text-red-500 text-red-700" />
         </button>
       </div>
 
       {/* Sidebar content */}
       <nav className="p-4 mt-4 sm:mt-6 md:mt-24">
-        {/* for admin */}
-        {role === "admin" && (
-          <AdminSideList
-            isOpen={isOpen}
-            role={role}
-            toggleSidebar={toggleSidebar}
-          />
-        )}
+        <Suspense fallback={<div>Loading...</div>}>
+          {role === "admin" && (
+            <AdminSideList
+              isOpen={isOpen}
+              role={role}
+              toggleSidebar={toggleSidebar}
+            />
+          )}
 
-        {/* for users */}
-        {role === "user" && (
-          <UserSideList
-            isOpen={isOpen}
-            role={role}
-            toggleSidebar={toggleSidebar}
-          />
-        )}
+          {role === "user" && (
+            <UserSideList
+              isOpen={isOpen}
+              role={role}
+              toggleSidebar={toggleSidebar}
+            />
+          )}
 
-        {/* for instructor */}
-        {role === "instructor" && (
-          <InstructorSideList
-            isOpen={isOpen}
-            role={role}
-            toggleSidebar={toggleSidebar}
-          />
-        )}
+          {role === "instructor" && (
+            <InstructorSideList
+              isOpen={isOpen}
+              role={role}
+              toggleSidebar={toggleSidebar}
+            />
+          )}
+        </Suspense>
       </nav>
 
       <div className="p-4 w-full mb-10 flex flex-col space-y-10">

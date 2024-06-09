@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, memo } from "react";
 import { FaSave } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
 
@@ -31,8 +31,11 @@ const QuizDetailForm = ({ data, setEditingQuiz, state }) => {
     onSuccess: (response) => {
       console.log(response);
       queryClient.invalidateQueries([
-        ["live", "quizzes"],
-        ["upcoming", "quizzes"],
+        ["AllLiveQuizzes"],
+        ["AllUpcomingQuizzes"],
+        ["AllResultedQuizzes"],
+        ["6-live-quizzes"],
+        ["5-upcoming-quizzes"],
         ["quiz", { id: quizId }],
       ]);
       if (state === "update") {
@@ -107,7 +110,7 @@ const QuizDetailForm = ({ data, setEditingQuiz, state }) => {
           }
         />
         <QuizInput
-          label="Duration in Minutes"
+          label="Duration in Min"
           name="duration"
           type="number"
           value={formData.duration}
@@ -156,7 +159,7 @@ const QuizDetailForm = ({ data, setEditingQuiz, state }) => {
           <>
             <Link
               className="bg-orange-500 px-3 py-2 hover:bg-orange-600 text-white rounded"
-              to=".."
+              to={`/${role}/quizzes`}
               relative="route">
               Cancel
             </Link>
@@ -170,4 +173,4 @@ const QuizDetailForm = ({ data, setEditingQuiz, state }) => {
   );
 };
 
-export default QuizDetailForm;
+export default memo(QuizDetailForm);

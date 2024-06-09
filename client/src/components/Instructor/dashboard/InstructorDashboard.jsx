@@ -1,47 +1,39 @@
-import React, { useContext } from "react";
+import React, { memo, useContext } from "react";
 import { AuthContext } from "../../../context/AuthContext";
 import { NewQuizzesList } from "../../ui/dashBoard/NewQuizzesList";
 import { UpcomingQuizzes } from "../../ui/dashBoard/UpcomingQuizzesList";
 import withDataFetching from "../../../utils/HigerOrderComponent/withDataFetching";
-
-import MainLayout from "../../ui/MainLayout";
 import { Link } from "react-router-dom";
 
 const InstructorDashboard = () => {
-  const { role, name, email, id, token } = useContext(AuthContext);
+  // const { role, name } = useContext(AuthContext);
   return (
-    <MainLayout>
-      <main className="flex flex-col gap-4 my-4">
-        <h1 className="text-2xl font-bold mx-4">
-          Welcome, {role} {name}
-        </h1>
-        {/* create new with button */}
-        <div className="flex gap-4 mx-4">
-          <Link
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            to="instructor/quizzes/createQuiz">
-            Create New Quiz
-          </Link>
-        </div>
-        <div className="w-full my-4 rounded">
+    <main className="flex flex-col">
+      {/* create new with button */}
+      <div className="w-full my-4 rounded flex flex-wrap md:flex-nowrap">
+        <div className="md:basis-2/3">
           <InstructorUpcomingQuizzes />
         </div>
-        <div className="w-full my-4 rounded">
-          <InstructorNewQuizzes />
+        <div className="flex justify-center items-center md:basis-1/3 w-full bg-red-500">
+          <h1 className="text-white font-bold">Latest 2 Results of a quiz</h1>
         </div>
-      </main>
-    </MainLayout>
+        {/* TODO  add results area here */}
+      </div>
+      <div className="w-full my-4 rounded">
+        <InstructorNewQuizzes />
+      </div>
+    </main>
   );
 };
 
 const InstructorNewQuizzes = withDataFetching(NewQuizzesList, {
   queryKey: ["new_5_quiz"],
-  URL: "http://localhost:3000/api/v1/quiz/instructor/published",
+  URL: "http://localhost:3000/api/v1/quiz/instructor/published?limit=4",
 });
 
 const InstructorUpcomingQuizzes = withDataFetching(UpcomingQuizzes, {
-  URL: "http://localhost:3000/api/v1/quiz/instructor/unpublished",
-  queryKey: ["upcoming", "quizzes"],
+  URL: "http://localhost:3000/api/v1/quiz/instructor/unpublished?limit=4",
+  queryKey: ["5-upcoming-quizzes"],
 });
 
-export default InstructorDashboard;
+export default memo(InstructorDashboard);

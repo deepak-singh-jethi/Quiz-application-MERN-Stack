@@ -1,11 +1,11 @@
-import React from "react";
+import React, { memo } from "react";
 
 import withDataFetching from "../../../utils/HigerOrderComponent/withDataFetching.jsx";
 import DashBoardHeadings from "../../ui/dashBoard/DashBoardHeading.jsx";
 
 const URL = "http://localhost:3000/api/v1/users?role=user&limit=6";
 
-export const StudentList = ({ data }) => {
+export const StudentList = memo(({ data }) => {
   return (
     <div className="p-6 bg-gray-800 border border-gray-200 rounded-lg shadow-sm w-full mt-6 h-full">
       {/* card heading */}
@@ -38,4 +38,4 @@ export const StudentList = ({ data }) => {
       </div>
     </div>
   );
-};
+});

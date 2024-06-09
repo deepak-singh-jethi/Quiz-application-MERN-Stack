@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { memo, useCallback, useState } from "react";
 import withDataFetching from "../../utils/HigerOrderComponent/withDataFetching";
 import { FaEdit } from "react-icons/fa";
 import { useParams } from "react-router";
@@ -10,7 +10,6 @@ import Modal from "../ui/Modal";
 import QuizStatusChange from "./features/QuizStatusChange";
 
 const Quiz = ({ data }) => {
-  // const quiz = data.quiz;
   const [editingQuiz, setEditingQuiz] = useState(false);
   const [addNewQusOpen, setIsNewQusOpen] = useState(false);
   const [questionState, setQuestionState] = useState({
@@ -69,8 +68,8 @@ const Quiz = ({ data }) => {
       <div className="text-center w-full mt-5 mb-4">
         <button
           onClick={handleToggleAddNewQus}
-          className="py-2 px-3  bg-[#23C55E] hover:bg-[#59d185] text-stone-100  rounded transition duration-300 ease-in-out w-fit ">
-          {`${addNewQusOpen ? "Close" : "Add Question"}`}
+          className="py-2 px-3  bg-gray-600 hover:bg-gray-500 text-stone-100  rounded transition duration-300 ease-in-out w-fit ">
+          {`${addNewQusOpen ? "Close" : "Add Question + "}`}
         </button>
       </div>
 
@@ -115,4 +114,4 @@ const QuizDetails = () => {
   return <QuizWithFetching />;
 };
 
-export default QuizDetails;
+export default memo(QuizDetails);

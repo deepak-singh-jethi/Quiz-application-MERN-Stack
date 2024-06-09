@@ -5,7 +5,7 @@ import { IoCalendarClearOutline } from "react-icons/io5";
 import DashBoardHeadings from "./DashBoardHeading";
 import { AuthContext } from "../../../context/AuthContext";
 
-export const UpcomingQuizzes = memo(({ data }) => {
+export const UpcomingQuizzes = memo(({ data, hideText }) => {
   const { role } = useContext(AuthContext);
 
   if (data.quiz.length === 0) {
@@ -29,13 +29,14 @@ export const UpcomingQuizzes = memo(({ data }) => {
       <DashBoardHeadings
         heading="Upcoming Quizzes"
         path="Show All"
-        link="/admin/quizzes"
+        link={`${role}/quizzes`}
+        hideText={hideText}
       />
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {data.quiz.map((quiz) => (
           <Link
             key={quiz.id}
-            to={`${role}/quizzes/${quiz.id}`}
+            to={`/${role}/quizzes/${quiz.id}`}
             className="block p-2 bg-white hover:bg-blue-50 shadow-lg rounded-lg transition-all duration-200 ease-in-out">
             <div className="flex items-center">
               <img
@@ -58,6 +59,12 @@ export const UpcomingQuizzes = memo(({ data }) => {
                     day: "numeric",
                   })}
                 </p>
+                {quiz.createdBy.name && (
+                  <p className="text-xs text-gray-600 mb-2">
+                    <span className="font-bold text-black">Created by:</span>{" "}
+                    {quiz.createdBy.name}
+                  </p>
+                )}
               </div>
             </div>
           </Link>

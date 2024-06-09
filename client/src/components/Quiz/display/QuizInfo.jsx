@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 
 const QuizInfo = ({ quiz, handleStatusChange }) => {
   const hours = Math.floor(quiz.duration / 60);
@@ -41,4 +41,4 @@ const QuizInfo = ({ quiz, handleStatusChange }) => {
   );
 };
 
-export default QuizInfo;
+export default memo(QuizInfo);

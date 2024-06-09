@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import QuizDetailForm from "./features/QuizDetailForm";
 const data = {
   quiz: {
@@ -17,4 +17,4 @@ const NewQuiz = () => {
   );
 };
 
-export default NewQuiz;
+export default memo(NewQuiz);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { FiHome, FiLayers, FiBarChart2 } from "react-icons/fi";
@@ -41,4 +41,4 @@ const InstructorSideList = ({ isOpen, role, toggleSidebar }) => {
   );
 };
 
-export default InstructorSideList;
+export default memo(InstructorSideList);

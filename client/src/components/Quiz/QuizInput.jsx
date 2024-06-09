@@ -21,4 +21,4 @@ const QuizInput = memo(
   )
 );
 
-export default QuizInput;
+export default memo(QuizInput);

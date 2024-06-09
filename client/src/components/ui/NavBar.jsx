@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { memo, useContext } from "react";
 import { Link } from "react-router-dom";
 import { IoAddCircleSharp } from "react-icons/io5";
 import { FaBuildingUser } from "react-icons/fa6";
@@ -7,7 +7,7 @@ import { AuthContext } from "../../context/AuthContext";
 const navBtnClass =
   "flex h-fit justify-center items-center gap-2 border-2 hover:bg-gray-600 hover:text-white rounded-full md:p-2 p-1  transition-colors duration-300";
 
-const NavBar = () => {
+const NavBar = memo(() => {
   const { role, name } = useContext(AuthContext);
   return (
     <>
@@ -31,6 +31,6 @@ const NavBar = () => {
       </button>
     </>
   );
-};
+});
 
 export default NavBar;

@@ -1,8 +1,8 @@
-import React from "react";
+import React, { memo } from "react";
 import withDataFetching from "../../../utils/HigerOrderComponent/withDataFetching.jsx";
 import DashBoardHeadings from "../../ui/dashBoard/DashBoardHeading.jsx";
 
-export const TeachersList = ({ data }) => {
+export const TeachersList = memo(({ data }) => {
   if (!data || !data.users || data.users.length === 0) {
     return (
       <div className="text-gray-600 text-center p-6">
@@ -44,4 +44,4 @@ export const TeachersList = ({ data }) => {
       </div>
     </div>
   );
-};
+});
