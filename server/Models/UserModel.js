@@ -52,7 +52,7 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-userSchema.index({ email: 1 });
+userSchema.index({ email: 1, name: 1 });
 
 // Middleware to store encryted password
 userSchema.pre("save", async function (next) {

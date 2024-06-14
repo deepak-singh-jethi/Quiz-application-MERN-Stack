@@ -3,6 +3,7 @@ import { QueryClient } from "@tanstack/react-query";
 export const queryClient = new QueryClient();
 
 export async function authorizedFetcher({ signal, URL, token }) {
+  console.log("active");
   const response = await fetch(
     URL,
     {
@@ -41,13 +42,14 @@ export async function authorizedUpdater({ URL, body, token }) {
 
   return data;
 }
-export async function authorizedRemover({ URL, token }) {
+export async function authorizedRemover({ URL, token, body }) {
   const response = await fetch(URL, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
+    body: JSON.stringify(body),
   });
 
   if (!response.ok) {
@@ -59,7 +61,7 @@ export async function authorizedRemover({ URL, token }) {
 
   return data;
 }
-export async function authorizedCreator({ URL, body, token }) {
+export async function authorizedCreator({ URL, body = {}, token }) {
   const response = await fetch(URL, {
     method: "POST",
     headers: {
@@ -68,8 +70,6 @@ export async function authorizedCreator({ URL, body, token }) {
     },
     body: JSON.stringify(body),
   });
-
-  console.log(response);
 
   if (!response.ok) {
     const error = await response.json();

@@ -25,19 +25,19 @@ export const UpcomingQuizzes = memo(({ data, hideText }) => {
   }
 
   return (
-    <div className="bg-gray-800 border-2 rounded-md shadow-sm p-6">
+    <div className="bg-gray-800 border-2 rounded-md shadow-sm p-6 container">
       <DashBoardHeadings
-        heading="Upcoming Quizzes"
+        heading="Draft Quizzes(Not Ready)"
         path="Show All"
         link={`${role}/quizzes`}
         hideText={hideText}
       />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      <div className="flex flex-wrap gap-4 items-center">
         {data.quiz.map((quiz) => (
           <Link
             key={quiz.id}
             to={`/${role}/quizzes/${quiz.id}`}
-            className="block p-2 bg-white hover:bg-blue-50 shadow-lg rounded-lg transition-all duration-200 ease-in-out">
+            className="block p-2 bg-white hover:bg-blue-50 shadow-lg rounded-lg transition-all duration-200 ease-in-out min-w-[270px]">
             <div className="flex items-center">
               <img
                 src="https://dummyimage.com/50.png/09f/fff"
@@ -50,14 +50,6 @@ export const UpcomingQuizzes = memo(({ data, hideText }) => {
                 </h3>
                 <p className="text-sm text-gray-600 mt-1">
                   Topic: {quiz.topics.join(", ")}
-                </p>
-                <p className="text-sm text-gray-600 mt-1">
-                  <span className="font-bold">Scheduled:</span>{" "}
-                  {new Date(quiz.createdAt).toLocaleString(undefined, {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
                 </p>
                 {quiz.createdBy.name && (
                   <p className="text-xs text-gray-600 mb-2">

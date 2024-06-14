@@ -8,6 +8,7 @@ import QuizDetailForm from "./features/QuizDetailForm";
 import QuizInfo from "./display/QuizInfo";
 import Modal from "../ui/Modal";
 import QuizStatusChange from "./features/QuizStatusChange";
+import QuizFreeOrNot from "./features/QuizFreeOrNot";
 
 const Quiz = ({ data }) => {
   const [editingQuiz, setEditingQuiz] = useState(false);
@@ -18,14 +19,18 @@ const Quiz = ({ data }) => {
     questionId: null,
   });
   const [isChangeStatusOpen, setIsChangeStatusOpen] = useState(false);
+  const [isQuizFreeOrNotOpen, setIsQuizFreeONotOpen] = useState(false);
 
   const handleToggleAddNewQus = useCallback(() => {
     setIsNewQusOpen(!addNewQusOpen);
   }, [addNewQusOpen]);
 
-  const handleStatusChange = () => {
+  const handleStatusChange = useCallback(() => {
     setIsChangeStatusOpen(!isChangeStatusOpen);
-  };
+  }, [isChangeStatusOpen]);
+  const handleQuizFreeOrNot = useCallback(() => {
+    setIsQuizFreeONotOpen(!isQuizFreeOrNotOpen);
+  }, [isQuizFreeOrNotOpen]);
 
   return (
     <div className="container mx-auto md:p-6 p-3 bg-gradient-to-br from-gray-700 to-gray-900 text-white rounded-lg shadow-md">
@@ -40,6 +45,18 @@ const Quiz = ({ data }) => {
           />
         </Modal>
       )}
+      {/* modal for changing quiz free or not */}
+      {isQuizFreeOrNotOpen && (
+        <Modal
+          isOpen={isQuizFreeOrNotOpen}
+          onClose={() => setIsQuizFreeONotOpen(false)}>
+          <QuizFreeOrNot
+            modalClose={handleQuizFreeOrNot}
+            changeTo={!data.quiz.isFree}
+          />
+        </Modal>
+      )}
+      {/* quiz details */}
       <div className="bg-white p-6 rounded-lg shadow-md text-gray-700">
         <div className="flex justify-between items-center">
           <h2 className="text-xl lg:text-3xl font-bold">Quiz Details</h2>
@@ -62,9 +79,11 @@ const Quiz = ({ data }) => {
             quiz={data.quiz}
             handleStatusChange={handleStatusChange}
             handleToggleAddNewQus={handleToggleAddNewQus}
+            handleQuizFreeOrNot={handleQuizFreeOrNot}
           />
         )}
       </div>
+      {/* add new question button */}
       <div className="text-center w-full mt-5 mb-4">
         <button
           onClick={handleToggleAddNewQus}

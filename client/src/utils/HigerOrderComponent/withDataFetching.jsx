@@ -1,5 +1,4 @@
-// withDataFetching.js
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../components/ui/Loading";
 import ErrorBlock from "../../components/ui/ErrorBlock";
@@ -13,10 +12,20 @@ const withDataFetching = (
   return (props) => {
     const { token } = useContext(AuthContext);
 
+    // Unconditionally call hooks
     const { data, isLoading, isError, error } = useQuery({
       queryKey: queryKey,
       queryFn: ({ signal }) => authorizedFetcher({ signal, URL, token }),
+      staleTime: 12000,
+      cacheTime: 12000,
     });
+
+    // Handle the side effect of setting the hasNextPage state
+    useEffect(() => {
+      if (data && additionalProps.setHasNextPage) {
+        additionalProps.setHasNextPage(data.hasNextPage);
+      }
+    }, [data, additionalProps]);
 
     if (isLoading) return <Loading />;
 

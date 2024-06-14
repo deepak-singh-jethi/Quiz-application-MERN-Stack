@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 
-const QuizInfo = ({ quiz, handleStatusChange }) => {
+const QuizInfo = ({ quiz, handleStatusChange, handleQuizFreeOrNot }) => {
   const hours = Math.floor(quiz.duration / 60);
   const minutes = quiz.duration % 60;
   return (
@@ -23,7 +23,7 @@ const QuizInfo = ({ quiz, handleStatusChange }) => {
           <strong>Total Questions:</strong> {quiz.questions.length}
         </p>
         {/* add a question button */}
-        <div className="w-full flex justify-between pt-6">
+        <div className="w-full flex flex-wrap justify-between pt-6">
           {/* change quiz status Active on hidden based on the value of quiz.isPublished */}
           <button
             className={`py-2 px-3  ${
@@ -32,8 +32,19 @@ const QuizInfo = ({ quiz, handleStatusChange }) => {
               quiz.isPublished ? "hover:bg-[#c83838] " : "hover:bg-[#3aba6b]"
             } rounded transition duration-300 ease-in-out text-white`}
             onClick={handleStatusChange}>
-            {quiz.isPublished ? "Hide Quiz" : "Make Public"}
+            {quiz.isPublished ? "Mark as Not Ready" : "Mark as Ready to use"}
           </button>
+          {quiz.isPublished && (
+            <button
+              className={`py-2 px-3  ${
+                quiz.isFree ? "bg-[#EF4443] text-white" : "bg-green-500"
+              } ${
+                quiz.isFree ? "hover:bg-[#c83838] " : "hover:bg-[#3aba6b]"
+              } rounded transition duration-300 ease-in-out text-white`}
+              onClick={handleQuizFreeOrNot}>
+              {quiz.isFree ? "Make Premium" : "Make Quiz Free"}
+            </button>
+          )}
         </div>
       </div>
       {/* delete Quiz button */}

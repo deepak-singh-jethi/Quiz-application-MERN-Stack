@@ -5,13 +5,13 @@ import { IoCalendarClearOutline } from "react-icons/io5";
 
 import DashBoardHeadings from "./DashBoardHeading.jsx";
 
-export const NewQuizzesList = ({ data, hideText }) => {
+export const QuizzesList = ({ data, hideText }) => {
   const { role } = useContext(AuthContext);
   if (!data || !data.quiz || data.quiz.length === 0)
     return (
       <div className="flex flex-col items-center justify-center text-gray-600 text-center p-2 bg-gray-800 border border-gray-200 rounded-lg shadow-md w-full">
         <IoCalendarClearOutline className="text-6xl text-gray-400 mb-4" />
-        <p className="text-lg">You don't have any live quizzes...</p>
+        <p className="text-lg">You haven't made any Quiz Free...</p>
         <Link
           to={`/${role}/quizzes/createQuiz`}
           className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700 transition duration-300">
@@ -24,7 +24,7 @@ export const NewQuizzesList = ({ data, hideText }) => {
     <div className="md:p-6 p-3 bg-gray-800 border border-gray-200 rounded-lg shadow-sm mt-6 w-full ">
       {/* heading area */}
       <DashBoardHeadings
-        heading="Live Quizzes"
+        heading="Free Quizzes"
         path="Show more.."
         link={`${role}/quizzes`}
         hideText={hideText}

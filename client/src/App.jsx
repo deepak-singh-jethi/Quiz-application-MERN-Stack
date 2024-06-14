@@ -41,6 +41,9 @@ const UnauthorizedPage = lazy(() =>
 
 // Fallback for Suspense
 import Loading from "./components/ui/Loading.jsx";
+import AdminAllGroupArea from "./components/admin/groupBoard/AdminAllGroupArea.jsx";
+import InstructorAllGroupArea from "./components/Instructor/groupBoard/InstructorAllGroupArea.jsx";
+import GroupDetails from "./components/group/display/GroupDetails.jsx";
 
 // Define router with all routes
 const router = createBrowserRouter(
@@ -98,6 +101,31 @@ const router = createBrowserRouter(
             </Suspense>
           }
         />
+        <Route
+          path="groups"
+          element={
+            <Suspense fallback={<Loading />}>
+              <AdminAllGroupArea />
+            </Suspense>
+          }
+        />
+        <Route
+          path="groups/:groupId"
+          element={
+            <Suspense fallback={<Loading />}>
+              <GroupDetails />
+            </Suspense>
+          }
+        />
+        <Route
+          path="groups/createNewGroup"
+          element={
+            <Suspense fallback={<Loading />}>
+              <h1>create new Group</h1>
+            </Suspense>
+          }
+        />
+
         <Route path="results" element={<h1>Results</h1>} />
         <Route path="results/:id" element={<h1>1 Result</h1>} />
         <Route path="students" element={<h1>Students page</h1>} />
@@ -106,6 +134,10 @@ const router = createBrowserRouter(
         <Route
           path="teachers/:teachersId"
           element={<h1>Teacher number 1</h1>}
+        />
+        <Route
+          path="teachers/:createTeacher"
+          element={<h1>Add new Teacher form</h1>}
         />
       </Route>
 
@@ -143,6 +175,22 @@ const router = createBrowserRouter(
           element={
             <Suspense fallback={<Loading />}>
               <NewQuiz />
+            </Suspense>
+          }
+        />
+        <Route
+          path="groups"
+          element={
+            <Suspense fallback={<Loading />}>
+              <InstructorAllGroupArea />
+            </Suspense>
+          }
+        />
+        <Route
+          path="groups/:groupId"
+          element={
+            <Suspense fallback={<Loading />}>
+              <GroupDetails />
             </Suspense>
           }
         />

@@ -4,7 +4,7 @@ import { queryClient, authorizedUpdater } from "../../../utils/http";
 import { useNavigate, useParams } from "react-router";
 import { AuthContext } from "../../../context/AuthContext";
 
-const QuizStatusChange = ({ modalClose, changeStatusTo }) => {
+const QuizFreeOrNot = ({ modalClose, changeTo }) => {
   const { quizId } = useParams();
   const { token } = useContext(AuthContext);
   const { mutate, isPending, isError, error } = useMutation({
@@ -26,7 +26,7 @@ const QuizStatusChange = ({ modalClose, changeStatusTo }) => {
   const handleUpdate = () => {
     mutate({
       URL: `http://localhost:3000/api/v1/quiz/${quizId}`,
-      body: { isPublished: changeStatusTo },
+      body: { isFree: changeTo },
       token: token,
     });
   };
@@ -35,12 +35,12 @@ const QuizStatusChange = ({ modalClose, changeStatusTo }) => {
     <>
       <button
         className={`px-4 py-2 rounded ${
-          changeStatusTo
+          changeTo
             ? "bg-[#23C55E] hover:bg-green-600"
             : "bg-red-500 hover:bg-red-600"
         } text-white`}
         onClick={handleUpdate}>
-        {`${changeStatusTo ? "Ready to use" : "Not Ready"}`}
+        {`${changeTo ? "Make Free " : "Only Groups"}`}
       </button>
       <button
         className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-gray-800"
@@ -64,13 +64,13 @@ const QuizStatusChange = ({ modalClose, changeStatusTo }) => {
 
   return (
     <div className="bg-white rounded-lg p-6 shadow-lg">
-      <h3 className="text-lg font-semibold mb-4">Change Quiz Status</h3>
+      <h3 className="text-lg font-semibold mb-4">Change Quiz Visibility</h3>
       <p className="mb-6">{`Are you sure you want to ${
-        changeStatusTo ? "Mark it as Ready!" : "Mark it as Not Ready "
-      } `}</p>
+        changeTo ? "Make Premium" : "Make Free"
+      } this quiz?`}</p>
       <div className="flex justify-end space-x-4">{content}</div>
     </div>
   );
 };
 
-export default memo(QuizStatusChange);
+export default memo(QuizFreeOrNot);

@@ -2,6 +2,7 @@ import React, { memo } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { FiHome, FiLayers, FiBarChart2 } from "react-icons/fi";
+import { MdGroups } from "react-icons/md";
 
 const liStyle =
   "flex justify-center items-center gap-5 bg-gray-700 hover:bg-gray-600 rounded w-full px-5 py-3";
@@ -23,6 +24,12 @@ const InstructorSideList = ({ isOpen, role, toggleSidebar }) => {
         <FiHome className="text-2xl" />
         {isOpen && <SideBarSpan title={"Dashboard"} />}
       </li>
+      {/* Groups */}
+      <li onClick={() => handleNavigate(`/${role}/groups`)} className={liStyle}>
+        <MdGroups className="text-2xl" />
+        {isOpen && <SideBarSpan title={"Groups"} />}
+      </li>
+
       {/* Quizzes */}
       <li
         onClick={() => handleNavigate(`/${role}/quizzes`)}

@@ -25,12 +25,6 @@ const QuizSchema = new mongoose.Schema(
       type: Number,
       required: [true, "Duration Can't be empty"],
     },
-
-    // numberOfQus: {
-    //   type: Number,
-    //   required: [true, "Number of Questions Can't be empty"],
-    // },
-
     perQusMarks: {
       type: Number,
       required: [true, "Total Marks Can't be empty"],
@@ -41,6 +35,10 @@ const QuizSchema = new mongoose.Schema(
       default: Date.now,
     },
     isPublished: {
+      type: Boolean,
+      default: false,
+    },
+    isFree: {
       type: Boolean,
       default: false,
     },
@@ -66,16 +64,7 @@ const QuizSchema = new mongoose.Schema(
   }
 );
 
-// middleWare to remove exams from search results if they are not published or deleted
-
-// QuizSchema.pre(/^find/, function (next) {
-//   const userRole = this.getQuery().userRole;
-
-//   console.log(userRole);
-
-//   this.find({ isPublished: true });
-//   next();
-// });
+QuizSchema.index({ name: 1 });
 
 const Quiz = mongoose.model("Quiz", QuizSchema);
 module.exports = Quiz;

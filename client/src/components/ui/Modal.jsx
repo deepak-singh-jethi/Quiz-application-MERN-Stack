@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 
-const Modal = ({ isOpen, onClose, children }) => {
+const Modal = ({ isOpen, onClose, children, isLarge = false }) => {
   const modalRef = useRef();
 
   useEffect(() => {
@@ -15,7 +15,7 @@ const Modal = ({ isOpen, onClose, children }) => {
   return createPortal(
     <>
       <div className="modal-backdrop" onClick={onClose}></div>
-      <div className="modal" ref={modalRef}>
+      <div className={`${isLarge ? "modal-large" : "modal"}`} ref={modalRef}>
         {children}
       </div>
     </>,

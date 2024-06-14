@@ -4,7 +4,9 @@ import { Link } from "react-router-dom";
 const DashBoardHeadings = memo(({ heading, path, link, hideText }) => {
   return (
     <div className="flex justify-between items-center mb-6 gap-2 md:gap-5">
-      <h1 className="text-sm md:text-2xl font-bold text-white">{heading}</h1>
+      {!hideText && (
+        <h1 className="text-sm md:text-2xl font-bold text-white">{heading}</h1>
+      )}
       {path && !hideText && (
         <Link
           to={link}

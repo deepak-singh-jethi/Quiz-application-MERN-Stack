@@ -14,10 +14,19 @@ router.use(authController.protect);
 // verified admin , users can get all users
 router
   .route("/")
-  .get(authController.restrictTo("admin"), userControllers.getAllUsers);
+  .get(
+    authController.restrictTo("admin", "instructor"),
+    userControllers.getAllUsers
+  );
 
 // verified admin , users can get users info
 router.get("/:userId", userControllers.getUser);
+
+router.get(
+  "/search/users",
+  authController.restrictTo("admin", "instructor"),
+  userControllers.searchUser
+);
 
 // only user can update and delete
 router.use(authController.restrictTo("user"));

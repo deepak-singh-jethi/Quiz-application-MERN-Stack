@@ -59,7 +59,7 @@ const AddNewQus = ({ addQuestion, onCancel, quiz }) => {
   };
 
   return (
-    <div className="bg-gray-100 md:p-6 p-3 rounded-lg shadow-md text-gray-700 my-5">
+    <div className="bg-white md:p-6 p-3 rounded-lg shadow-md text-gray-700 my-5">
       <div className="w-full text-center">
         <h3 className="font-semibold text-2xl mb-3">Add New Question</h3>
       </div>

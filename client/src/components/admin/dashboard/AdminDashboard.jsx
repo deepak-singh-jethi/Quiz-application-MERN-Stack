@@ -1,13 +1,13 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../../../context/AuthContext";
-import MainLayout from "../../ui/MainLayout";
 
 import withDataFetching from "../../../utils/HigerOrderComponent/withDataFetching";
 
-import { NewQuizzesList } from "../../ui/dashBoard/NewQuizzesList";
+import { QuizzesList } from "../../ui/dashBoard/QuizzesList";
 import { UpcomingQuizzes } from "../../ui/dashBoard/UpcomingQuizzesList";
 import { StudentList } from "./AdminStudentsList";
 import { TeachersList } from "./AdminTeachersList";
+import { GroupsList } from "../../ui/dashBoard/GroupsList";
 
 const AdminDashboard = () => {
   const { role } = useContext(AuthContext);
@@ -16,8 +16,9 @@ const AdminDashboard = () => {
       <div className="w-full my-4">
         <AdminNewQuizzesList />
       </div>
-      <div className="w-full my-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6 h-full">
         <AdminUpcomingQuizzes />
+        <AdminGroupsList />
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6 h-full">
         {role === "admin" && <AdminStudentsList />}
@@ -32,9 +33,9 @@ const AdminTeachersList = withDataFetching(TeachersList, {
   URL: "http://localhost:3000/api/v1/users?role=instructor&limit=4",
 });
 
-const AdminNewQuizzesList = withDataFetching(NewQuizzesList, {
+const AdminNewQuizzesList = withDataFetching(QuizzesList, {
   queryKey: ["6-live-quizzes"],
-  URL: "http://localhost:3000/api/v1/quiz?limit=4",
+  URL: "http://localhost:3000/api/v1/quiz/admin/free?limit=4",
 });
 
 const AdminUpcomingQuizzes = withDataFetching(UpcomingQuizzes, {
@@ -45,6 +46,10 @@ const AdminUpcomingQuizzes = withDataFetching(UpcomingQuizzes, {
 const AdminStudentsList = withDataFetching(StudentList, {
   URL: "http://localhost:3000/api/v1/users?role=user&limit=4",
   queryKey: ["5-students_list"],
+});
+const AdminGroupsList = withDataFetching(GroupsList, {
+  URL: "http://localhost:3000/api/v1/group?limit=2",
+  queryKey: ["5-groups_list"],
 });
 
 export default AdminDashboard;

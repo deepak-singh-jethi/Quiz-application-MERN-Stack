@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 
 // local imports
+const groupRoutes = require("./routes/groupsRoutes");
 const userRoutes = require("./routes/userRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const quizRoutes = require("./routes/quizRoutes");
@@ -27,11 +28,11 @@ app.use(express.static(`${__dirname}/public`));
 app.use(express.json());
 
 // * Routes
-
+app.use("/api/v1/result", resultRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/admin", adminRoutes);
 app.use("/api/v1/quiz", quizRoutes);
-app.use("/api/v1/result", resultRoutes);
+app.use("/api/v1/group", groupRoutes);
 
 // * Error handling => for undefined routes
 app.all("*", (req, res, next) => {

@@ -1,3 +1,11 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+
+}
+
+
 .modal {
     margin: 0;
     position: fixed;
@@ -6,7 +14,6 @@
     border: none;
     border-radius: 6px;
     z-index: 1001;
-    /* Adjusted z-index to ensure it appears above the backdrop */
     /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26); */
     display: flex;
     flex-direction: column;
@@ -22,7 +29,21 @@
     height: 100vh;
     background: rgba(0, 0, 0, 0.8);
     z-index: 1000;
-    /* Ensure it is behind the modal */
+}
+
+.modal-large {
+    margin: 0;
+    position: fixed;
+    top: 10vh;
+    left: calc(50% - 15rem);
+    border: none;
+    border-radius: 6px;
+    z-index: 1001;
+    /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26); */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    animation: slide-down-fade-in 300ms ease-out forwards;
 }
 
 @keyframes slide-down-fade-in {
@@ -44,6 +65,10 @@
         padding: 1rem;
         left: calc(50% -10rem);
     }
+    .modal-large {
+        width: 98vw; 
+        left: 3px;
+    }
 }
 
 @media (max-width: 640px) and (min-width: 441px) {
@@ -53,6 +78,10 @@
         top: 20vh;
         padding: 1rem;
     }
+         .modal-large {
+             width: 410px;
+             left: calc(50% - 13rem);
+         }
 }
 
 /* Media query for medium screens */
@@ -61,7 +90,12 @@
         width: 70%;
         left: 15%;
         top: 25vh;
+        
         padding: 1.5rem;
+    }
+    .modal-large {
+        width: 38rem;
+        left: calc(50% - 19rem);
     }
 }
 
@@ -73,4 +107,9 @@
         top: 30vh;
         padding: 2rem;
     }
+    .modal-large{
+        width: 45rem;
+        left: calc(50% - 20rem);
+    }
 }
+

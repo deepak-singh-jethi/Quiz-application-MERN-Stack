@@ -9,34 +9,54 @@ router.use(authController.protect);
 // 1.! handling CURD of Quiz
 router.get("", quizController.getAllQuiz);
 router.get("/:id", quizController.getQuiz);
+router.post("", quizController.createQuiz);
+router.delete("/:id", quizController.deleteQuiz);
+router.patch("/:id", quizController.updateQuiz);
 
 // * restrict create update and delete quiz to admin
 // router.use(authController.restrictTo("admin", "instructor"));
 
+router.get(
+  "/search/quiz",
+  authController.restrictTo("admin", "instructor"),
+  quizController.searchQuizzes
+);
+
+// * admin
 router.get(
   "/admin/upcoming",
   authController.restrictTo("admin"),
   quizController.getAllUnPublishedQuiz
 );
 router.get(
-  "/admin/myPublished",
+  "/admin/published",
   authController.restrictTo("admin"),
-  quizController.getMyCreatedQuizzes
+  quizController.getReadyToUseQuizzes
 );
+router.get(
+  "/admin/free",
+  authController.restrictTo("admin"),
+  quizController.getAllFreeQuiz
+);
+
+// * Instructor
+
 router.get(
   "/instructor/published",
   authController.restrictTo("instructor", "admin"),
   quizController.getAllPublishedQuizByInstructor
 );
 router.get(
-  "/instructor/unpublished",
+  "/instructor/upcoming",
   authController.restrictTo("instructor", "admin"),
   quizController.getAllUnPublishedQuizByInstructor
 );
 
-router.post("", quizController.createQuiz);
-router.delete("/:id", quizController.deleteQuiz);
-router.patch("/:id", quizController.updateQuiz);
+router.get(
+  "/instructor/free",
+  authController.restrictTo("instructor", "admin"),
+  quizController.getAllFreeQuizByInstructor
+);
 
 // 2. handling the questions of a quiz
 router.post("/questions/:quizId", quizController.addQuestion);

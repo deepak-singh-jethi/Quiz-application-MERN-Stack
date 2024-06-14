@@ -25,20 +25,12 @@ export const TeachersList = memo(({ data }) => {
           <div
             key={user.id}
             className="bg-white shadow-md rounded-lg px-4 py-1 transition duration-300 ease-in-out transform hover:scale-105">
-            <div className="mb-2">
+            <div className="mx-2 space-y-2 py-2">
               <h2 className="text-lg font-semibold text-gray-800">
                 {user.name}
               </h2>
               <p className="text-sm text-gray-500">{user.email}</p>
             </div>
-            <p className="text-sm text-gray-600 mb-2">
-              <span className="font-semibold">Joined:</span>{" "}
-              {new Date(user.createdAt).toLocaleDateString(undefined, {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </p>
           </div>
         ))}
       </div>

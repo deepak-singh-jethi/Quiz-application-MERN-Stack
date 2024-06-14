@@ -7,7 +7,6 @@ const MainLayout = memo(({ children }) => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   const toggleSidebar = (open) => {
-    console.log(open);
     setSidebarOpen(open);
   };
 
