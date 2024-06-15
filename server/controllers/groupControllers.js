@@ -6,7 +6,7 @@ const Quiz = require("../models/QuizModel");
 
 const APIFeatures = require("../utils/APIFeatures");
 
-// Create a new group
+// * Create a new group
 exports.createGroup = catchAsyncError(async (req, res, next) => {
   const id = req.user.id;
   const { name, description } = req.body;
@@ -33,7 +33,7 @@ exports.createGroup = catchAsyncError(async (req, res, next) => {
   });
 });
 
-// Get all groups with pagination and filtering
+// * Get all groups with pagination and filtering
 exports.getAllGroups = catchAsyncError(async (req, res, next) => {
   const features = new APIFeatures(
     Group.find()
@@ -78,7 +78,7 @@ exports.getGroupsByInstructor = catchAsyncError(async (req, res, next) => {
   const instructorId = req.user.id;
 
   // Ensure the user is an instructor
-  const instructor = await User.findById(instructorId);
+  const instructor = await User.findById(instructorId, { isDeleted: false });
 
   if (!instructor) {
     return next(new AppError("Unauthorized access", 401));
@@ -142,6 +142,10 @@ exports.getGroup = catchAsyncError(async (req, res, next) => {
     .populate({
       path: "quizzes",
       select: "name _id",
+    })
+    .populate({
+      path: "instructors",
+      select: "name _id email",
     });
 
   if (!group) {
@@ -196,7 +200,7 @@ exports.deleteGroup = catchAsyncError(async (req, res, next) => {
   });
 });
 
-// Add a member to a group
+// * Add a member to a group
 exports.addStudent = catchAsyncError(async (req, res, next) => {
   const { groupId } = req.params;
   const { userId } = req.body;
@@ -230,7 +234,7 @@ exports.addStudent = catchAsyncError(async (req, res, next) => {
   });
 });
 
-// Remove a member from a group
+// * Remove a member from a group
 exports.removeMember = catchAsyncError(async (req, res, next) => {
   const { groupId } = req.params;
   const { userId } = req.body;
@@ -261,7 +265,7 @@ exports.removeMember = catchAsyncError(async (req, res, next) => {
   });
 });
 
-// Add a quiz to a group
+// * Add a quiz to a group
 exports.addQuiz = catchAsyncError(async (req, res, next) => {
   const { groupId } = req.params;
 
@@ -296,7 +300,7 @@ exports.addQuiz = catchAsyncError(async (req, res, next) => {
   });
 });
 
-// Remove a quiz from a group
+// * Remove a quiz from a group
 exports.removeQuiz = catchAsyncError(async (req, res, next) => {
   const { groupId } = req.params;
   const { quizId } = req.body;
@@ -321,7 +325,7 @@ exports.removeQuiz = catchAsyncError(async (req, res, next) => {
   });
 });
 
-//* add a instructor to a group
+// *  add a instructor to a group
 exports.addInstructor = catchAsyncError(async (req, res, next) => {
   const { groupId } = req.params;
   const { instructorId } = req.body;
@@ -345,6 +349,32 @@ exports.addInstructor = catchAsyncError(async (req, res, next) => {
   if (!group.instructors.includes(instructorId)) {
     group.instructors.push(instructorId);
   }
+  await group.save();
+  res.status(200).json({
+    status: "success",
+    data: {
+      group,
+    },
+  });
+});
+
+// * remove a instructor from a group
+
+exports.removeInstructor = catchAsyncError(async (req, res, next) => {
+  const { groupId } = req.params;
+  const { instructorId } = req.body;
+
+  if (!groupId || !instructorId) {
+    return next(new AppError("Group ID and Instructor ID are required", 400));
+  }
+
+  const group = await Group.findById(groupId);
+
+  if (!group) {
+    return next(new AppError("Group not found", 404));
+  }
+
+  group.instructors.pull(instructorId);
   await group.save();
   res.status(200).json({
     status: "success",

@@ -19,7 +19,6 @@ const GroupQuizzesInfo = ({ quizzes, onAdd, openedSection }) => {
   const handleSearch = (e) => {
     const query = e.target.value.toLowerCase();
     setSearchQuery(query);
-    console.log("tesr");
 
     // Filter quizzes based on search query
     const filteredQuizzes = quizzes.filter((quiz) =>
@@ -75,7 +74,7 @@ const GroupQuizzesInfo = ({ quizzes, onAdd, openedSection }) => {
       </div>
       <div className="overflow-x-auto mb-6">
         {quizzesInfo.length > 0 ? (
-          <div className="grid grid-rows-2 md:grid-rows-1 grid-flow-col gap-4 items-center justify-start mt-3">
+          <div className="grid grid-rows-2  grid-flow-col gap-4 items-center justify-start mt-3">
             {quizzesInfo.map((quiz) => (
               <div
                 key={quiz._id}

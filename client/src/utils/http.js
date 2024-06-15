@@ -3,7 +3,7 @@ import { QueryClient } from "@tanstack/react-query";
 export const queryClient = new QueryClient();
 
 export async function authorizedFetcher({ signal, URL, token }) {
-  console.log("active");
+  console.log(URL);
   const response = await fetch(
     URL,
     {
@@ -20,6 +20,7 @@ export async function authorizedFetcher({ signal, URL, token }) {
     throw new Error(error.message);
   }
   const { data } = await response.json();
+  console.log(data);
   return data;
 }
 export async function authorizedUpdater({ URL, body, token }) {

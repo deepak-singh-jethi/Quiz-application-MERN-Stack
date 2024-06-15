@@ -1,6 +1,5 @@
 import React, { useCallback, useState, memo, useEffect } from "react";
 import { FaUser, FaUserCircle, FaSearch, FaTimes } from "react-icons/fa";
-import Modal from "../../ui/Modal";
 
 // Fallback component when no members are found
 const NoMembersFallback = () => (
@@ -9,7 +8,7 @@ const NoMembersFallback = () => (
   </div>
 );
 
-const MembersInfo = ({ members, onAdd, openedSection }) => {
+const MembersInfo = ({ members, onAdd, openedSection, sectionName, role }) => {
   const [memberInfo, setMemberInfo] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -19,7 +18,7 @@ const MembersInfo = ({ members, onAdd, openedSection }) => {
 
   // for opening add new students area
   const handleAdd = () => {
-    onAdd("member");
+    onAdd(sectionName);
   };
 
   // for handling the search of students
@@ -45,20 +44,22 @@ const MembersInfo = ({ members, onAdd, openedSection }) => {
     <div className="m-3 overflow-x-hidden pb-4 px-4 sm:px-8 md:px-16 lg:px-24">
       <div className="flex justify-start items-center gap-3 mb-5">
         <h2 className="text-lg md:text-xl font-semibold  flex items-center">
-          <FaUser className="mr-2" /> Members ({memberInfo.length})
+          <FaUser className="mr-2" /> {sectionName} ({memberInfo.length})
         </h2>
 
-        <button
-          className={`ml-4 ${
-            openedSection !== "member" ? "bg-blue-500" : "bg-red-600"
-          } bg-blue-500 text-white font-semibold py-2 px-3 rounded-lg ${
-            openedSection !== "member"
-              ? "hover:bg-blue-600"
-              : "hover:bg-red-500"
-          } transition duration-100`}
-          onClick={handleAdd}>
-          Manage members
-        </button>
+        {role === "admin" && (
+          <button
+            className={`ml-4 ${
+              openedSection !== sectionName ? "bg-blue-500" : "bg-red-600"
+            } bg-blue-500 text-white font-semibold py-2 px-3 rounded-lg ${
+              openedSection !== sectionName
+                ? "hover:bg-blue-600"
+                : "hover:bg-red-500"
+            } transition duration-100`}
+            onClick={handleAdd}>
+            Manage {sectionName}
+          </button>
+        )}
       </div>
 
       <div className="flex items-center mb-4 md:max-w-md mt-2">
@@ -68,7 +69,7 @@ const MembersInfo = ({ members, onAdd, openedSection }) => {
             type="text"
             value={searchQuery}
             onChange={handleSearch}
-            placeholder="Search members"
+            placeholder={`Search ${sectionName}`}
             className="w-full pl-10 pr-4 py-2 border border-gray-500 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
           />
           {searchQuery && (
@@ -81,7 +82,7 @@ const MembersInfo = ({ members, onAdd, openedSection }) => {
       </div>
       <div className="overflow-x-auto">
         {memberInfo.length > 0 ? (
-          <div className="grid grid-rows-2 md:grid-rows-1 grid-flow-col gap-4 items-center justify-start mt-3">
+          <div className="grid grid-rows-2  grid-flow-col gap-4 items-center justify-start mt-3">
             {memberInfo.map((member) => (
               <div
                 key={member._id}

@@ -16,6 +16,9 @@ const createBody = (type, id) => {
   if (type === "quizzes") {
     body = { quizId: id };
   }
+  if (type === "instructor") {
+    body = { instructorId: id };
+  }
   return body;
 };
 
@@ -31,7 +34,9 @@ const AddRemoveTable = ({
   const { token, role } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  console.log(groupId);
+  let searchType;
+  if (type === "users" || type === "instructor") searchType = "users";
+  if (type === "quizzes") searchType = "quizzes";
 
   const {
     mutate: addItem,
@@ -74,9 +79,6 @@ const AddRemoveTable = ({
   const isItemInPreData = (item) =>
     preData.some((preItem) => preItem._id === item._id);
 
-  //   userId
-  //   quizId
-
   const handleAdd = (id) => {
     let body = createBody(type, id);
     addItem({
@@ -102,19 +104,19 @@ const AddRemoveTable = ({
           <thead>
             <tr className="bg-gray-200 border-b">
               <th className="py-2 px-4 text-left text-gray-600">Name</th>
-              {type === "users" && (
+              {searchType === "users" && (
                 <th className="py-2 px-4 text-left text-gray-600">Email</th>
               )}
               <th className="py-2 px-4 text-right text-gray-600">Action</th>
             </tr>
           </thead>
           <tbody className="overflow-y-auto" style={{ maxHeight: "200px" }}>
-            {queryData[type].map((item) => (
+            {queryData[searchType].map((item) => (
               <tr
                 key={item._id}
                 className="border-b hover:bg-gray-100 transition">
                 <td className="py-2 px-2 md:px-4">{item.name}</td>
-                {type === "users" && (
+                {searchType === "users" && (
                   <td className="py-2 px-2 md:px-4">{item.email}</td>
                 )}
                 <td className="py-2 px-2 md:px-4 text-right">

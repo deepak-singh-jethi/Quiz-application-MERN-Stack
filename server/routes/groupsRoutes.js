@@ -45,10 +45,13 @@ router
 
 //* routes for adding instructor or get all quizzes for a instructor
 
-router.route("/admin/instructor/:groupId").post(
-  authController.restrictTo("admin"),
-  groupController.addInstructor // add instructor for group
-);
+router
+  .route("/admin/instructor/:groupId")
+  .post(
+    authController.restrictTo("admin"),
+    groupController.addInstructor // add instructor for group
+  )
+  .delete(authController.restrictTo("admin"), groupController.removeInstructor);
 
 router.get(
   "/instructor/all",

@@ -49,13 +49,10 @@ const SearchAddDataBlock = ({
     setIsSearchEnabled(true);
   }, [searchQuery]);
 
-  console.log(preData, "search add Data block");
-  console.log(queryData, "search add Data block");
-
   return (
-    <div className="bg-white w-full max-w-3xl px-1 py-4 md:p-4 lg:p-6 rounded-lg shadow-lg overflow-hidden">
-      <div className="flex justify-between items-center mb-4">
-        <div className="relative w-full">
+    <div className="bg-white w-full max-w-3xl px-1 py-4 md:p-4 rounded-lg shadow-lg overflow-hidden">
+      <div className="flex justify-between items-center mb-4 mt-3">
+        <div className="relative w-full ">
           <input
             type="text"
             value={searchQuery}
@@ -65,12 +62,12 @@ const SearchAddDataBlock = ({
             className="w-full pl-4 pr-12 py-3 border border-gray-300 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700"
           />
           <FaSearch
-            className="absolute top-1/2 right-4 transform -translate-y-1/2 text-gray-500 cursor-pointer hover:text-blue-500"
+            className="absolute top-1/2 right-4 transform -translate-y-1/2 text-gray-500 cursor-pointer hover:text-blue-500 "
             onClick={handleSearch2}
           />
         </div>
         <FaTimes
-          className="ml-4 text-gray-500 cursor-pointer hover:text-red-500"
+          className="ml-4 mr-3 text-gray-500 cursor-pointer text-xl hover:text-red-500"
           onClick={handleClose}
         />
       </div>

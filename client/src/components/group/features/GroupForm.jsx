@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { authorizedCreator } from "../../../utils/http";
+import { authorizedCreator, authorizedUpdater } from "../../../utils/http";
 import { useNavigate } from "react-router-dom";
 import { queryClient } from "../../../utils/http";
 import { useMutation } from "@tanstack/react-query";
@@ -10,6 +10,7 @@ import ErrorBlock from "../../ui/ErrorBlock";
 const GroupForm = ({
   onClose,
   operation,
+  groupId,
   formInputs = {
     name: "",
     description: "",
@@ -35,11 +36,33 @@ const GroupForm = ({
       onClose();
     },
   });
+  const { mutate: editGroup } = useMutation({
+    mutationFn: authorizedUpdater,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: ["group", groupId],
+      });
+      setFormData({
+        name: "",
+        description: "",
+      });
+      navigate(`/admin/groups/${data.group.id}`);
+      onClose();
+    },
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (formData.name === "" || formData.description === "") {
       setFormError("Please Fill all the fields");
+      return;
+    }
+    if (operation === "edit") {
+      editGroup({
+        URL: `http://localhost:3000/api/v1/group/${groupId}`,
+        body: formData,
+        token,
+      });
       return;
     }
     setFormError("");
@@ -83,7 +106,7 @@ const GroupForm = ({
           />
           <div className="flex gap-3">
             <button className="mt-4 w-full bg-green-500 text-white font-semibold py-2 rounded-lg hover:bg-green-600 transition duration-300">
-              Submit
+              {operation === "edit" ? "Update" : "Create"}
             </button>
             <button
               onClick={onClose}
