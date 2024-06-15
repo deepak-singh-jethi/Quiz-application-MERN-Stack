@@ -2,11 +2,10 @@ import React, { memo, useContext } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { queryClient, authorizedUpdater } from "../../../utils/http";
 import { useNavigate, useParams } from "react-router";
-import { AuthContext } from "../../../context/AuthContext";
 
 const QuizFreeOrNot = ({ modalClose, changeTo }) => {
   const { quizId } = useParams();
-  const { token } = useContext(AuthContext);
+
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: authorizedUpdater,
     onSuccess: () => {
@@ -27,7 +26,6 @@ const QuizFreeOrNot = ({ modalClose, changeTo }) => {
     mutate({
       URL: `http://localhost:3000/api/v1/quiz/${quizId}`,
       body: { isFree: changeTo },
-      token: token,
     });
   };
 

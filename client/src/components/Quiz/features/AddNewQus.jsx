@@ -17,7 +17,7 @@ const AddNewQus = ({ addQuestion, onCancel, quiz }) => {
   });
   const [error2, setError2] = useState(null);
 
-  const { token, role } = useContext(AuthContext);
+  const { role } = useContext(AuthContext);
   const { quizId } = useParams();
 
   const { mutate, isPending, isError, error } = useMutation({
@@ -54,7 +54,6 @@ const AddNewQus = ({ addQuestion, onCancel, quiz }) => {
     mutate({
       URL: `http://localhost:3000/api/v1/quiz/questions/${quizId}`,
       body: [newQuestion],
-      token: token,
     });
   };
 

@@ -1,31 +1,24 @@
-import React, { memo, useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 const ProtectedRoute = ({ element, expectedRoles }) => {
-  const { login } = useContext(AuthContext);
-
-  let token = localStorage.getItem("token");
-  let role = localStorage.getItem("role");
-  let name = localStorage.getItem("name");
-  let email = localStorage.getItem("email");
-  let id = localStorage.getItem("id");
+  const { isAuthenticated, isAuthChecked, role, id } = useContext(AuthContext);
 
   const navigate = useNavigate();
   const isRoleExist = expectedRoles.includes(role);
 
   useEffect(() => {
-    if (!token) {
+    // Check if isAuthenticated is false and navigate to login page
+    if (!isAuthenticated && isAuthChecked) {
       navigate("/auth");
-    } else if (!isRoleExist) {
+    } else if (!isRoleExist && isAuthChecked) {
       navigate("/notAuthorized");
     }
-    if (token && role) {
-      login(token, role, name, email, id);
-    }
-  }, [token, role]);
+  }, [role, id, isAuthenticated, isAuthChecked]);
 
-  return element;
+  // Render the protected route only if authentication check is complete and isAuthenticated is true
+  return isAuthChecked && isAuthenticated ? element : null;
 };
 
 export default ProtectedRoute;

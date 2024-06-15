@@ -31,7 +31,7 @@ const AddRemoveTable = ({
   handleClose,
 }) => {
   const { groupId } = useParams();
-  const { token, role } = useContext(AuthContext);
+  const { role } = useContext(AuthContext);
   const navigate = useNavigate();
 
   let searchType;
@@ -83,7 +83,7 @@ const AddRemoveTable = ({
     let body = createBody(type, id);
     addItem({
       URL: addURL,
-      token,
+
       body,
     });
   };
@@ -91,7 +91,7 @@ const AddRemoveTable = ({
     let body = createBody(type, id);
     removeItem({
       URL: removeURL,
-      token,
+
       body,
     });
   };

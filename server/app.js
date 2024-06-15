@@ -1,6 +1,7 @@
 //package import
 const express = require("express");
 const cors = require("cors");
+const cookies = require("cookie-parser");
 
 // local imports
 const groupRoutes = require("./routes/groupsRoutes");
@@ -17,6 +18,7 @@ const app = express();
 const corsOptions = {
   origin: "http://localhost:5173",
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
@@ -26,6 +28,9 @@ app.use(express.static(`${__dirname}/public`));
 
 // body parser => reading data from body into req.body
 app.use(express.json());
+
+// cookies api
+app.use(cookies());
 
 // * Routes
 app.use("/api/v1/result", resultRoutes);

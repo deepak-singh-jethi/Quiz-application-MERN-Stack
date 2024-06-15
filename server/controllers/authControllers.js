@@ -6,106 +6,177 @@ const catchAsyncError = require("../utils/catchAsyncError");
 const AppError = require("../utils/AppError");
 
 // function to create jwt token
+async function createToken(id) {
+  const user = await User.findById(id);
 
-function createToken(id) {
-  return jwt.sign({ id }, process.env.JWT_SECRET);
+  const accessToken = jwt.sign({ id }, process.env.JWT_ACCESS_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  });
+  const refreshToken = jwt.sign({ id }, process.env.JWT_REFRESH_SECRET, {
+    expiresIn: process.env.JWT_REFRESH_EXPIRES_IN,
+  });
+  user.refreshToken = refreshToken;
+  await user.save({ validateBeforeSave: false });
+
+  return {
+    accessToken,
+    refreshToken,
+  };
 }
 
-// *  user controllers
+// * user controllers
 
 // register for students
 exports.register = catchAsyncError(async (req, res, next) => {
   req.body.role = "user";
+
   const newUser = await User.create(req.body);
-  console.log(newUser);
-  const token = createToken(newUser._id);
-  res.status(200).json({
-    message: "new user created!",
-    status: "success",
-    data: {
-      user: newUser,
-      token,
-    },
-  });
+
+  const { accessToken, refreshToken } = await createToken(newUser._id);
+
+  const loggedInUser = await User.findById(newUser._id).select(
+    "-password -refreshToken"
+  );
+
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  res
+    .status(200)
+    .cookie("refreshToken", refreshToken, options)
+    .cookie("accessToken", accessToken, options)
+    .json({
+      message: "new user created!",
+      status: "success",
+      data: {
+        user: loggedInUser,
+      },
+    });
 });
 
-// * common controllers
-
-// login
+// * login
 exports.login = catchAsyncError(async (req, res, next) => {
   const { email, password } = req.body;
 
-  //* check if email and password exist
   if (!email || !password) {
     return next(new AppError("Please provide email and password", 400));
   }
-  //* check if user exists
 
   const user = await User.findOne({ email }).select("+password");
 
-  //* if user don't exist or password is incorrect
+  // if user don't exist or password is incorrect
   if (!user || !(await user.isPasswordCorrect(password, user.password))) {
     return next(new AppError("Invalid email or password", 401));
   }
 
-  const token = createToken(user._id);
+  const { accessToken, refreshToken } = await createToken(user._id);
 
-  res.status(200).json({
-    message: "user logged in successfully",
-    status: "success",
-    data: {
-      user,
-      token,
-    },
-  });
+  const loggedInUser = await User.findById(user._id).select(
+    "-password -refreshToken"
+  );
+
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  res
+    .status(200)
+    .cookie("refreshToken", refreshToken, options)
+    .cookie("accessToken", accessToken, options)
+    .json({
+      message: "user logged in successfully",
+      status: "success",
+      data: {
+        loggedInUser,
+      },
+    });
+});
+
+// * refresh token
+exports.refreshToken = catchAsyncError(async (req, res, next) => {
+  // get incoming refresh token from cookies or body
+
+  const incomingRefreshToken = req.cookies.refreshToken;
+
+  // check if token is present
+  if (!incomingRefreshToken) {
+    return next(new AppError("Unauthorized Request", 400));
+  }
+
+  // verify token
+  const decoded = jwt.verify(
+    incomingRefreshToken,
+    process.env.JWT_REFRESH_SECRET
+  );
+
+  // check if user still exists
+  const currentUser = await User.findById(decoded.id);
+  if (!currentUser) {
+    return next(new AppError("User no longer exists", 401));
+  }
+
+  //  check if incoming refresh token is same as database refresh token
+
+  if (currentUser.refreshToken !== incomingRefreshToken) {
+    return next(new AppError("Refresh token is expired or invalid", 401));
+  }
+
+  //   generate new access token
+  const { accessToken, refreshToken } = await createToken(currentUser._id);
+
+  //  set cookie
+
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  return res
+    .status(200)
+    .cookie("refreshToken", refreshToken, options)
+    .cookie("accessToken", accessToken, options)
+    .json({
+      message: "Refreshed successfully",
+    });
 });
 
 // protection middleware
 exports.protect = catchAsyncError(async (req, res, next) => {
-  let token;
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
-  ) {
-    token = req.headers.authorization.split(" ")[1];
-  }
+  // * get token from cookies
+  const token = req.cookies?.accessToken;
 
-  //* check if token exist
+  // * check if token is present
   if (!token) {
-    return res.status(401).json({
-      message: "you are not logged in! Please login first to get access",
-    });
+    return next(new AppError("Unauthorized Request", 401));
   }
 
-  //* verify token and get user id
+  // * verify token
+  const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
 
-  const decodedData = await promisify(jwt.verify)(
-    token,
-    process.env.JWT_SECRET
-  );
+  // * check if user still exists
+  const currentUser = await User.findById(decoded.id);
 
-  //* fetch user detail based on decoded id
-  const fetchedUser = await User.findById(decodedData.id);
-
-  if (!fetchedUser) {
-    return res.status(401).json({
-      message: "User Belonging to this token does not exist",
-    });
+  if (!currentUser) {
+    return next(new AppError("User no longer exists", 401));
   }
 
-  //* attach the user detail to the req body
-  req.user = fetchedUser;
+  // TODO  * 4) check if user changed password after the token was issued
+  // if (currentUser.isPasswordChangedAfterTokenIssued(decoded.iat)) {
+  //   return next(new AppError("User recently changed password", 401));
+  // }
 
-  // todo check if user changed password after the token was issued
-
+  // * grant access to protected route
+  req.user = currentUser;
   next();
 });
 
-// restrict middleware  based on role
+// restrict middleware based on role
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
-    //check role ['admin','user','instructor']
-    console.log(roles);
+    // check role ['admin', 'user', 'instructor']
 
     if (!roles.includes(req.user.role)) {
       return next(
@@ -116,3 +187,26 @@ exports.restrictTo = (...roles) => {
     next();
   };
 };
+
+// logout
+exports.logout = catchAsyncError(async (req, res, next) => {
+  const updatedUser = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      refreshToken: null,
+    },
+    {
+      new: true,
+    }
+  );
+
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+  return res
+    .status(200)
+    .clearCookie("refreshToken", options)
+    .clearCookie("accessToken", options)
+    .json({ message: "Logged out successfully" });
+});

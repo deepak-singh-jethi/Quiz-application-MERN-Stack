@@ -125,6 +125,7 @@ const Quiz = ({ data }) => {
 
 const QuizDetails = () => {
   const { quizId } = useParams();
+  console.log(quizId);
   const QuizWithFetching = withDataFetching(Quiz, {
     URL: `http://localhost:3000/api/v1/quiz/${quizId}`,
     queryKey: ["quiz", { id: quizId }],

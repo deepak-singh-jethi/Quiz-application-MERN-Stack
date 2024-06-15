@@ -1,4 +1,4 @@
-import React, { memo, useState, useContext } from "react";
+import React, { memo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { FaSave } from "react-icons/fa";
@@ -6,12 +6,10 @@ import QuizInput from "../QuizInput.jsx";
 import { authorizedUpdater, queryClient } from "../../../utils/http.js";
 import Loading from "../../ui/Loading.jsx";
 import ErrorBlock from "../../ui/ErrorBlock.jsx";
-import { AuthContext } from "../../../context/AuthContext.jsx";
 
 const EditingView = ({ question, toggleEditQuestion }) => {
   const { quizId } = useParams();
   const [qus, setQus] = useState(question);
-  const { token } = useContext(AuthContext);
 
   const {
     mutate,
@@ -66,7 +64,6 @@ const EditingView = ({ question, toggleEditQuestion }) => {
     mutate({
       URL: `http://localhost:3000/api/v1/quiz/questions/${qus.id}`,
       body: qus,
-      token: token,
     });
   };
   if (mutationIsLoading) {

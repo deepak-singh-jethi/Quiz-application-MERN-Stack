@@ -1,11 +1,13 @@
-import React, { useState, createContext } from "react";
+import axios from "axios";
+import React, { useState, useEffect, createContext } from "react";
 
+// Create the AuthContext
 export const AuthContext = createContext({
-  token: "xxxxx",
-  role: "xxxxx",
-  name: "xxxxx",
-  email: "xxxxx",
-  id: "xxxxx",
+  role: "",
+  name: "",
+  email: "",
+  id: "",
+  isAuthenticated: false,
   logout: () => {},
   login: () => {},
 });
@@ -15,31 +17,93 @@ const initialState = {
   name: "",
   email: "",
   id: "",
+  isAuthenticated: false,
 };
 
+// Create an Axios instance
+const axiosInstance = axios.create({
+  baseURL: "http://localhost:3000/api/v1",
+  withCredentials: true,
+});
+
+// Response interceptor
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+    if (error.response && error.response.status === 401) {
+      originalRequest._retry = true;
+      try {
+        // Attempt to refresh the token
+        const response = await axiosInstance.post("/users/refreshToken");
+
+        // Retry the original request
+        return axiosInstance(error.config);
+      } catch (refreshError) {
+        console.error("Failed to refresh token:", refreshError);
+        // Redirect to login page
+        window.location.href = "/auth";
+        return Promise.reject(refreshError);
+      }
+    }
+
+    return Promise.reject(error);
+  }
+);
+
+// AuthProvider component
 export const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState(localStorage.getItem("token"));
   const [user, setUser] = useState(initialState);
 
   const { name, email, id, role } = user;
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthChecked, setIsAuthChecked] = useState(false);
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
-    localStorage.removeItem("name");
-    localStorage.removeItem("email");
-    localStorage.removeItem("id");
-    setToken(null);
-    setUser(initialState);
+  const logout = async () => {
+    try {
+      await axiosInstance.post("http://localhost:3000/api/v1/users/logout");
+      setUser(initialState);
+      setIsAuthenticated(false);
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
-  const login = (token, role, name, email, id) => {
-    setToken(token);
-    setUser({ name, email, id, role });
+
+  const login = (user) => {
+    setUser(user);
+    setIsAuthenticated(true);
+    setIsAuthChecked(true);
   };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await axiosInstance.get(
+          "http://localhost:3000/api/v1/users/getMe"
+        );
+        setUser(response.data.data.user);
+        setIsAuthenticated(true);
+        setIsAuthChecked(true);
+      } catch (error) {
+        setIsAuthChecked(true);
+        console.error("Failed to fetch user:", error);
+      }
+    };
+    fetchUser();
+  }, []);
 
   return (
     <AuthContext.Provider
-      value={{ token, role, name, email, id, logout, login }}>
+      value={{
+        role,
+        name,
+        email,
+        id,
+        isAuthenticated,
+        isAuthChecked,
+        logout,
+        login,
+      }}>
       {children}
     </AuthContext.Provider>
   );

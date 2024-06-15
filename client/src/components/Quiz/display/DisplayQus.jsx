@@ -9,7 +9,7 @@ import Modal from "../../ui/Modal.jsx";
 
 const DisplayView = ({ question, index, toggleEditQuestion }) => {
   const navigate = useNavigate();
-  const { token, role } = useContext(AuthContext);
+  const { role } = useContext(AuthContext);
   const { quizId } = useParams();
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -47,7 +47,6 @@ const DisplayView = ({ question, index, toggleEditQuestion }) => {
                 onClick={() => {
                   mutate({
                     URL: `http://localhost:3000/api/v1/quiz/questions/${question.id}`,
-                    token: token,
                   });
                   setIsDeleting(false);
                 }}>

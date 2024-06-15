@@ -7,6 +7,7 @@ const router = express.Router();
 // common routes
 router.post("/login", authController.login);
 router.post("/register", authController.register);
+router.post("/refreshToken", authController.refreshToken);
 
 // protect and restrict middleware => only verified users can access these routes
 router.use(authController.protect);
@@ -18,6 +19,8 @@ router
     authController.restrictTo("admin", "instructor"),
     userControllers.getAllUsers
   );
+router.get("/getMe", userControllers.getMe);
+router.post("/logout", authController.logout);
 
 // verified admin , users can get users info
 router.get("/:userId", userControllers.getUser);

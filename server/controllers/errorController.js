@@ -23,7 +23,7 @@ const handleJsonWebTokenError = () => {
 };
 
 const handleTokenExpiredError = () => {
-  return new AppError("Your token has expired. Please Login Again");
+  return new AppError("Your token has expired. Please Login Again", 401);
 };
 
 const errorForDev = (err, res) => {

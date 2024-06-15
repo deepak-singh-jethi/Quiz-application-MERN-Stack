@@ -137,6 +137,21 @@ exports.searchUser = catchAsyncError(async (req, res, next) => {
   });
 });
 
+exports.getMe = catchAsyncError(async (req, res, next) => {
+  const userId = req.user.id;
+
+  const user = await User.findById(userId).select("-__v -refreshToken");
+
+  if (!user) return next(new AppError("User not found", 404));
+
+  res.status(200).json({
+    message: "User Found",
+    data: {
+      user,
+    },
+  });
+});
+
 // TODO update password
 
 // TODO forgot password

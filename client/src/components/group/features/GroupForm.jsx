@@ -1,9 +1,8 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { authorizedCreator, authorizedUpdater } from "../../../utils/http";
 import { useNavigate } from "react-router-dom";
 import { queryClient } from "../../../utils/http";
 import { useMutation } from "@tanstack/react-query";
-import { AuthContext } from "../../../context/AuthContext";
 import Loading from "../../ui/Loading";
 import ErrorBlock from "../../ui/ErrorBlock";
 
@@ -16,7 +15,6 @@ const GroupForm = ({
     description: "",
   },
 }) => {
-  const { token } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -61,7 +59,6 @@ const GroupForm = ({
       editGroup({
         URL: `http://localhost:3000/api/v1/group/${groupId}`,
         body: formData,
-        token,
       });
       return;
     }
@@ -69,7 +66,6 @@ const GroupForm = ({
     mutate({
       URL: "http://localhost:3000/api/v1/group",
       body: formData,
-      token,
     });
   };
 

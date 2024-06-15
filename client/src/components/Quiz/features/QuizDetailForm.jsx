@@ -16,7 +16,7 @@ import Loading from "../../ui/Loading";
 
 const QuizDetailForm = ({ data, setEditingQuiz, state }) => {
   const { quizId } = useParams();
-  const { token, role } = useContext(AuthContext);
+  const { role } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -83,7 +83,6 @@ const QuizDetailForm = ({ data, setEditingQuiz, state }) => {
           ? `http://localhost:3000/api/v1/quiz/${quizId}`
           : "http://localhost:3000/api/v1/quiz",
       body: formData,
-      token,
     };
 
     if (state === "update") {
