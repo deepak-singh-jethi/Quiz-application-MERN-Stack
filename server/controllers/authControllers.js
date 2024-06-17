@@ -15,6 +15,7 @@ async function createToken(id) {
   const refreshToken = jwt.sign({ id }, process.env.JWT_REFRESH_SECRET, {
     expiresIn: process.env.JWT_REFRESH_EXPIRES_IN,
   });
+
   user.refreshToken = refreshToken;
   await user.save({ validateBeforeSave: false });
 
@@ -101,6 +102,8 @@ exports.refreshToken = catchAsyncError(async (req, res, next) => {
 
   const incomingRefreshToken = req.cookies.refreshToken;
 
+  console.log({ incomingRefreshToken });
+
   // check if token is present
   if (!incomingRefreshToken) {
     return next(new AppError("Unauthorized Request", 400));
@@ -115,13 +118,13 @@ exports.refreshToken = catchAsyncError(async (req, res, next) => {
   // check if user still exists
   const currentUser = await User.findById(decoded.id);
   if (!currentUser) {
-    return next(new AppError("User no longer exists", 401));
+    return next(new AppError("User no longer exists", 400));
   }
 
   //  check if incoming refresh token is same as database refresh token
-
+  console.log(currentUser.refreshToken);
   if (currentUser.refreshToken !== incomingRefreshToken) {
-    return next(new AppError("Refresh token is expired or invalid", 401));
+    return next(new AppError("Refresh token is expired or invalid", 400));
   }
 
   //   generate new access token

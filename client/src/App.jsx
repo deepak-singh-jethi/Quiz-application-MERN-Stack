@@ -221,7 +221,7 @@ const router = createBrowserRouter(
           path="quizzes/:quizId"
           element={
             <Suspense fallback={<Loading />}>
-              <QuizDetails />
+              <h1>User Quiz Details</h1>
             </Suspense>
           }
         />

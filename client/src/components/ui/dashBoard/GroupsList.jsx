@@ -31,29 +31,35 @@ export const GroupsList = ({ data, hideText }) => {
             <div
               key={group._id}
               className="flex flex-col justify-between bg-white rounded-lg p-4 w-[280px] mb-6">
-              <div className="flex justify-center items-center text-gray-800 text-3xl font-bold mb-4">
+              <div className="flex justify-center items-center text-gray-600 md:text-xl text-lg font-bold mb-4">
                 {group.name}
               </div>
-              <div className="flex justify-between text-gray-800">
+              <div className="flex justify-between text-gray-600">
                 <div className="flex flex-col items-center">
-                  <p className="text-lg font-semibold">Quizzes</p>
-                  <p className="text-3xl font-bold">{group.quizzes.length}</p>
+                  <p className="text-md font-semibold">Quizzes</p>
+                  <p className="md:text-md text-sm font-bold">
+                    {group.quizzes.length}
+                  </p>
                 </div>
                 <div className="flex flex-col items-center">
-                  <p className="text-lg font-semibold">Students</p>
-                  <p className="text-3xl font-bold">{group.members.length}</p>
+                  <p className="text-md font-semibold">Students</p>
+                  <p className="md:text-md text-sm font-bold">
+                    {group.members.length}
+                  </p>
                 </div>
               </div>
-              <div className="text-gray-500 text-sm mt-2">
-                Created by:{" "}
-                <span className="text-gray-800 font-medium">
-                  {group.createdBy.name}
-                </span>{" "}
-                on {new Date(group.createdAt).toLocaleString()}
-              </div>
+              {role === "admin" && (
+                <div className="text-gray-500 text-sm mt-2">
+                  Created by:{" "}
+                  <span className="text-gray-500 font-medium">
+                    {group.createdBy.name}
+                  </span>{" "}
+                  on {new Date(group.createdAt).toLocaleString()}
+                </div>
+              )}
               <Link
                 to={`/${role}/groups/${group._id}`}
-                className="text-gray-800 text-lg mt-4  underline hover:text-gray-400 text-center">
+                className="text-gray-600 md:text-md text-sm  mt-4  underline hover:text-gray-400 text-center">
                 View Details
               </Link>
             </div>

@@ -6,11 +6,12 @@ const Quiz = require("../models/QuizModel");
 const Result = require("../Models/ResultModel");
 const Question = require("../Models/QuestionModel");
 
-// create a result for a quiz
+// * create a result for a quiz
 exports.createResult = catchAsyncError(async (req, res, next) => {
   const quizId = req.params.quizId;
   const userId = req.user.id;
-  const { answers } = req.body;
+
+  const { answers, groupId } = req.body;
 
   if (!answers || answers.length === 0) {
     return next(new AppError("Answers cannot be empty", 400));
@@ -38,8 +39,9 @@ exports.createResult = catchAsyncError(async (req, res, next) => {
   const result = await Result.create({
     user: userId,
     quiz: quizId,
+    group: groupId,
     answers,
-    score, // Set the calculated score
+    score,
   });
 
   await Quiz.findByIdAndUpdate(quizId, {
@@ -56,21 +58,24 @@ exports.createResult = catchAsyncError(async (req, res, next) => {
   });
 });
 
-// get all results of a quiz
+// * get all results of a quiz
 exports.getQuizResults = catchAsyncError(async (req, res, next) => {
   const quizId = req.params.quizId;
 
   const results = await Result.find({ quiz: quizId })
     .populate({
       path: "user",
-      select: "name email",
+      select: "name",
     })
     .select("-quiz -answers -__v")
     .sort({ createdAt: -1 });
 
   res.status(200).json({
     status: "success",
-    results,
+    length: results.length,
+    data: {
+      results,
+    },
   });
 });
 
@@ -100,12 +105,33 @@ exports.getUserQuizResult = catchAsyncError(async (req, res, next) => {
     .select("-__v")
     .populate({
       path: "answers.question",
-      select: "question options -_id",
+      select: "question options",
     });
 
   res.status(200).json({
     status: "success",
     result,
+  });
+});
+
+// get all results of a group quiz
+exports.getAllResultsGroupQuiz = catchAsyncError(async (req, res, next) => {
+  const groupId = req.params.groupId;
+  const quizId = req.params.quizId;
+  const results = await Result.find({ group: groupId, quiz: quizId })
+    .populate({
+      path: "user",
+      select: "name",
+    })
+    .select("-quiz -answers -__v")
+    .sort({ createdAt: -1 });
+
+  res.status(200).json({
+    status: "success",
+    length: results.length,
+    data: {
+      results,
+    },
   });
 });
 

@@ -46,7 +46,7 @@ exports.getAllGroups = catchAsyncError(async (req, res, next) => {
         select: "name _id",
       })
       .populate({
-        path: "quizzes",
+        path: "quizzes.quiz",
         select: "name _id",
       }),
     req.query
@@ -89,8 +89,6 @@ exports.getGroupsByInstructor = catchAsyncError(async (req, res, next) => {
     instructors: { $in: instructorId },
   });
 
-  console.log(totalGroups);
-
   const features = new APIFeatures(
     Group.find({
       instructors: { $in: instructorId },
@@ -105,7 +103,7 @@ exports.getGroupsByInstructor = catchAsyncError(async (req, res, next) => {
         select: "name _id",
       })
       .populate({
-        path: "quizzes",
+        path: "quizzes.quiz",
         select: "name _id",
       }),
     req.query
@@ -132,6 +130,60 @@ exports.getGroupsByInstructor = catchAsyncError(async (req, res, next) => {
   });
 });
 
+// * get all groups of a student
+
+exports.getAllGroupsByStudent = catchAsyncError(async (req, res, next) => {
+  const studentId = req.user.id;
+  // find user
+  const user = User.findById(studentId);
+
+  // if user don't exist
+  if (!user) {
+    return next(new AppError("Unauthorized access", 401));
+  }
+  // find number of groups student exist
+  const totalGroups = await Group.countDocuments({
+    members: { $in: studentId },
+  });
+
+  // adding sorting filtering, limiting and pagination
+  const features = new APIFeatures(
+    Group.find({ members: { $in: studentId } })
+      .populate({
+        path: "createdBy",
+        select: "name _id",
+      })
+      .populate({
+        path: "members",
+        select: "name _id",
+      })
+      .populate({
+        path: "quizzes.quiz",
+        select: "name _id",
+      }),
+    req.query
+  )
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+
+  // calculating if user has next page of groups for pagination
+  const groups = await features.query;
+  const page = req.query.page * 1 || 1;
+  const limit = req.query.limit * 1 || 100;
+  const hasNextPage = page * limit < totalGroups;
+
+  res.status(200).json({
+    status: "success",
+    results: groups.length,
+    data: {
+      groups,
+      hasNextPage,
+    },
+  });
+});
+
 // * Get a single group by ID
 exports.getGroup = catchAsyncError(async (req, res, next) => {
   const group = await Group.findById(req.params.id)
@@ -140,7 +192,7 @@ exports.getGroup = catchAsyncError(async (req, res, next) => {
       select: "name _id email ",
     })
     .populate({
-      path: "quizzes",
+      path: "quizzes.quiz",
       select: "name _id",
     })
     .populate({
@@ -268,8 +320,7 @@ exports.removeMember = catchAsyncError(async (req, res, next) => {
 // * Add a quiz to a group
 exports.addQuiz = catchAsyncError(async (req, res, next) => {
   const { groupId } = req.params;
-
-  const { quizId } = req.body;
+  const { quizId, scheduledFor } = req.body;
 
   if (!groupId || !quizId) {
     return next(new AppError("Group ID and Quiz ID are required", 400));
@@ -288,7 +339,7 @@ exports.addQuiz = catchAsyncError(async (req, res, next) => {
   }
 
   if (!group.quizzes.includes(quizId)) {
-    group.quizzes.push(quizId);
+    group.quizzes.push({ quiz: quizId, scheduledFor });
   }
 
   await group.save();
@@ -315,8 +366,57 @@ exports.removeQuiz = catchAsyncError(async (req, res, next) => {
     return next(new AppError("Group not found", 404));
   }
 
-  group.quizzes.pull(quizId);
+  group.quizzes.pull({ quiz: quizId });
   await group.save();
+  res.status(200).json({
+    status: "success",
+    data: {
+      group,
+    },
+  });
+});
+
+// * change schedule for a group quiz
+
+exports.changeSchedule = catchAsyncError(async (req, res, next) => {
+  const { groupId } = req.params;
+  const { quizId, scheduledFor } = req.body;
+
+  console.log({ quizId });
+  console.log({ scheduledFor });
+
+  if (!groupId || !quizId || !scheduledFor) {
+    return next(
+      new AppError("Group ID, Quiz ID, and scheduledFor are required", 400)
+    );
+  }
+
+  // Validate scheduledFor is a valid date
+  if (isNaN(new Date(scheduledFor).getTime())) {
+    return next(new AppError("Invalid date for scheduledFor", 400));
+  }
+
+  // Find the group by its ID
+  const group = await Group.findById(groupId);
+
+  if (!group) {
+    return next(new AppError("Group not found", 404));
+  }
+
+  // Find the specific quiz in the group's quizzes array
+  const quiz = group.quizzes.find((q) => q.quiz.toString() === quizId);
+
+  if (!quiz) {
+    return next(new AppError("Quiz not found in the group", 404));
+  }
+
+  // Update the scheduledFor field for the quiz
+  quiz.scheduledFor = scheduledFor;
+
+  // Save the changes to the group document
+  await group.save();
+
+  // Return success response
   res.status(200).json({
     status: "success",
     data: {
@@ -359,7 +459,6 @@ exports.addInstructor = catchAsyncError(async (req, res, next) => {
 });
 
 // * remove a instructor from a group
-
 exports.removeInstructor = catchAsyncError(async (req, res, next) => {
   const { groupId } = req.params;
   const { instructorId } = req.body;

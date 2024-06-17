@@ -12,13 +12,14 @@ import { GroupsList } from "../../ui/dashBoard/GroupsList";
 const AdminDashboard = () => {
   const { role } = useContext(AuthContext);
   return (
-    <main className="container mx-auto">
-      <div className="w-full my-4">
-        <AdminNewQuizzesList />
-      </div>
+    <main className="container mx-auto mt-6">
+      {" "}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6 h-full">
-        <AdminUpcomingQuizzes />
         <AdminGroupsList />
+        <AdminUpcomingQuizzes />
+      </div>
+      <div className="w-full my-4">
+        <AdminFreeQuizzesList />
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6 h-full">
         {role === "admin" && <AdminStudentsList />}
@@ -33,8 +34,8 @@ const AdminTeachersList = withDataFetching(TeachersList, {
   URL: "http://localhost:3000/api/v1/users?role=instructor&limit=4",
 });
 
-const AdminNewQuizzesList = withDataFetching(QuizzesList, {
-  queryKey: ["6-live-quizzes"],
+const AdminFreeQuizzesList = withDataFetching(QuizzesList, {
+  queryKey: ["6-live-free-quizzes"],
   URL: "http://localhost:3000/api/v1/quiz/admin/free?limit=4",
 });
 

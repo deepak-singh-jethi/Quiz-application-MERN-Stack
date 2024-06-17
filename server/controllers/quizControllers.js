@@ -64,7 +64,7 @@ exports.searchQuizzes = catchAsyncError(async (req, res, next) => {
     name: { $regex: substringMatchPattern },
   })
     .select("name quizzes")
-    .limit(6); // Limiting the number of results to 6
+    .limit(3); // Limiting the number of results to 6
 
   // Separate quizzes into exact, prefix, and substring matches
   const exactMatches = [];

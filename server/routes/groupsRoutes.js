@@ -41,6 +41,10 @@ router
   .delete(
     authController.restrictTo("admin", "instructor"),
     groupController.removeQuiz // Remove a quiz from a group
+  )
+  .patch(
+    authController.restrictTo("admin", "instructor"),
+    groupController.changeSchedule // Update a quiz in a group
   );
 
 //* routes for adding instructor or get all quizzes for a instructor
@@ -53,10 +57,19 @@ router
   )
   .delete(authController.restrictTo("admin"), groupController.removeInstructor);
 
+// * route for getting all groups of instructor
 router.get(
   "/instructor/all",
   authController.restrictTo("admin", "instructor"),
   groupController.getGroupsByInstructor //get all the quiz where instructor is a part
+);
+
+//* routes for getting all groups of a student
+
+router.get(
+  "/student/all",
+  authController.restrictTo("admin", "user"),
+  groupController.getAllGroupsByStudent
 );
 
 module.exports = router;

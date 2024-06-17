@@ -12,6 +12,8 @@ const GroupQuizzesInfo = ({ quizzes, onAdd, openedSection }) => {
   const [quizzesInfo, setQuizzesInfo] = useState(quizzes);
   const [searchQuery, setSearchQuery] = useState("");
 
+  console.log(quizzes);
+
   useEffect(() => {
     setQuizzesInfo(quizzes);
   }, [quizzes]);
@@ -36,15 +38,15 @@ const GroupQuizzesInfo = ({ quizzes, onAdd, openedSection }) => {
   };
 
   return (
-    <div className="mt-6 px-4 sm:px-8 md:px-16 lg:px-24">
+    <div className="md:m-3 m-1 overflow-x-hidden pb-4 px-1 sm:px-8 md:px-16 lg:px-24">
       <div className="flex justify-start items-center gap-3 mb-5">
-        <h2 className="text-lg md:text-xl font-semibold mb-2 flex items-center">
+        <h2 className="text-sm md:text-lg font-semibold mb-2 flex items-center">
           <FaBook className="mr-2" /> Quizzes ({quizzesInfo.length})
         </h2>
         <button
           className={`ml-4 ${
             openedSection !== "quizzes" ? "bg-blue-500" : "bg-red-600"
-          } bg-blue-500 text-white font-semibold py-2 px-3 rounded-lg ${
+          } bg-blue-500 text-white font-semibold md:py-2 p-1 md:px-3 px-1 rounded-lg ${
             openedSection !== "quizzes"
               ? "hover:bg-blue-600"
               : "hover:bg-red-500"
@@ -53,7 +55,7 @@ const GroupQuizzesInfo = ({ quizzes, onAdd, openedSection }) => {
           Manage Quizzes
         </button>
       </div>
-
+      {/* search bar */}
       <div className="flex items-center mb-4 md:max-w-md mt-2">
         <div className="relative flex-grow">
           <FaSearch className="absolute top-3 left-3 text-gray-500" />
@@ -72,21 +74,25 @@ const GroupQuizzesInfo = ({ quizzes, onAdd, openedSection }) => {
           )}
         </div>
       </div>
-      <div className="overflow-x-auto mb-6">
+      {/* quizzes info */}
+      <div className="overflow-x-auto">
         {quizzesInfo.length > 0 ? (
-          <div className="grid grid-rows-2  grid-flow-col gap-4 items-center justify-start mt-3">
+          <div
+            className={`grid ${
+              quizzesInfo.length > 3 ? " grid-rows-2 " : " grid-rows-1 "
+            }  gap-4 items-center justify-start mt-3 grid-flow-col`}>
             {quizzesInfo.map((quiz) => (
               <div
-                key={quiz._id}
-                className="bg-gray-700 rounded-lg shadow-sm flex items-center h-[84px] w-[300px] md:w-[350px] lg:w-[400px] p-4 transition-transform transform hover:bg-gray-600">
-                <FaBook className="text-4xl mr-4 text-yellow-500" />
+                key={quiz.quiz.id}
+                className="bg-gray-700 rounded-lg shadow-sm flex items-center h-[60px] w-[250px] md:w-[350px] lg:w-[400px] md:p-4 p-2 transition-transform transform hover:bg-gray-600">
+                <FaBook className="text-lg md:text-xl lg:text-2xl mr-4 text-yellow-500" />
                 <div>
-                  <p className="text-xs sm:text-[15px] font-medium mb-1">
-                    {quiz.name}
+                  <p className="text-xs md:text-md sm:text-[15px] font-medium mb-1">
+                    {quiz.quiz.name}
                   </p>
-                  <p className="text-xs sm:text-[15px] text-gray-400">
+                  {/* <p className="text-xs sm:text-[15px] text-gray-400">
                     ID: {quiz.id}
-                  </p>
+                  </p> */}
                 </div>
               </div>
             ))}

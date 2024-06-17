@@ -9,6 +9,7 @@ import GroupQuizzesInfo from "./GroupQuizzesInfo";
 import SearchAddDataBlock from "../features/SearchAddDataBlock";
 import Modal from "../../ui/Modal";
 import GroupForm from "../features/GroupForm";
+import SearchAddUpdateQuizzes from "../features/SearchAddUpdateQuizzes";
 
 const Group = ({ data }) => {
   const {
@@ -95,31 +96,9 @@ const Group = ({ data }) => {
             />
           </Modal>
         )}
-        {/* Quizzes Section */}
-        <GroupQuizzesInfo
-          quizzes={quizzes}
-          onAdd={handleOpenedSection}
-          openedSection={openedSection}
-        />
-      </div>
-      {openedSection === "quizzes" && (
-        <Modal
-          isOpen={openedSection === "quizzes"}
-          onClose={handleOpenedSection}
-          isLarge={true}>
-          <SearchAddDataBlock
-            handleClose={() => setOpenedSection("")}
-            type="quizzes"
-            preData={quizzes}
-            searchURL={`http://localhost:3000/api/v1/quiz/search/quiz?name=`}
-            addURL={`http://localhost:3000/api/v1/group/${_id}/quizzes`}
-            removeURL={`http://localhost:3000/api/v1/group/${_id}/quizzes`}
-            placeHolder="Search Quiz to Add/Remove group"
-          />
-        </Modal>
-      )}
-      {/* Teachers Sections */}
-      <div className="mx-auto p-3 md:p-6 bg-gray-800 text-white rounded-lg shadow-md mb-8  md:mx-6">
+
+        {/* Teachers Sections */}
+
         <MembersInfo
           members={instructors}
           onAdd={handleOpenedSection}
@@ -143,6 +122,20 @@ const Group = ({ data }) => {
               placeHolder="Search teacher to add/Remove from group "
             />
           </Modal>
+        )}
+
+        {/* Quizzes Section */}
+        <GroupQuizzesInfo
+          quizzes={quizzes}
+          onAdd={handleOpenedSection}
+          openedSection={openedSection}
+        />
+
+        {openedSection === "quizzes" && (
+          <SearchAddUpdateQuizzes
+            handleClose={() => setOpenedSection("")}
+            preData={quizzes}
+          />
         )}
       </div>
     </>

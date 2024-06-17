@@ -14,5 +14,8 @@ router
 
 router.route("/user/:userId").get(resultController.getAllUserResults);
 router.route("/user/quiz/:quizId").get(resultController.getUserQuizResult);
+router
+  .route("/group/quiz/:groupId/:quizId")
+  .get(resultController.getAllResultsGroupQuiz);
 
 module.exports = router;

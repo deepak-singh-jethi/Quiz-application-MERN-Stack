@@ -19,8 +19,14 @@ const groupSchema = new mongoose.Schema(
     ],
     quizzes: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Quiz",
+        _id: false,
+        quiz: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Quiz",
+        },
+        scheduledFor: {
+          type: Date,
+        },
       },
     ],
     instructors: [

@@ -51,6 +51,7 @@ export async function authorizedFetcher({ URL, signal }) {
 }
 
 export async function authorizedUpdater({ URL, body }) {
+  console.log(body);
   try {
     const response = await axiosInstance.patch(URL, body);
     return response.data.data;
@@ -79,6 +80,7 @@ export async function authorizedRemover({ URL, body }) {
 }
 
 export async function authorizedCreator({ URL, body = {} }) {
+  console.log({ body });
   try {
     const response = await axiosInstance.post(URL, body);
     return response.data.data;

@@ -19,12 +19,16 @@ const resultSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.ObjectId,
     ref: "User",
-    required: true,
+    required: [true, "User id can't be empty"],
   },
   quiz: {
     type: mongoose.Schema.ObjectId,
     ref: "Quiz",
-    required: true,
+    required: [true, "Quiz id can't be empty"],
+  },
+  group: {
+    type: mongoose.Schema.ObjectId,
+    ref: "Group",
   },
   answers: {
     type: [answers],

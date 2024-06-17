@@ -91,10 +91,12 @@ const AddRemoveTable = ({
     let body = createBody(type, id);
     removeItem({
       URL: removeURL,
-
       body,
     });
   };
+
+  console.log({ preData });
+  console.log({ queryData });
 
   return (
     <div className="bg-white shadow rounded-lg sm:p-4 mt-4">
@@ -119,18 +121,18 @@ const AddRemoveTable = ({
                 {searchType === "users" && (
                   <td className="py-2 px-2 md:px-4">{item.email}</td>
                 )}
-                <td className="py-2 px-2 md:px-4 text-right">
+                <td className="py-2 px-2 md:px-4 flex justify-end">
                   {isItemInPreData(item) ? (
                     <button
-                      className="bg-red-500 w-[80px] text-white px-2 md:px-4 py-2 rounded-full shadow hover:bg-red-600 transition"
+                      className="bg-red-500 w-[30px] h-[30px] flex justify-center items-center text-white px-2 md:px-4 py-2 rounded-full shadow hover:bg-red-600 transition"
                       onClick={() => handleRemove(item.id)}>
-                      Remove
+                      -
                     </button>
                   ) : (
                     <button
-                      className="bg-green-500 w-[80px] text-white px-2 md:px-4 py-2 rounded-full shadow hover:bg-green-600 transition"
+                      className="bg-green-500 w-[30px] h-[30px] flex justify-center items-center  text-white px-2 md:px-4 py-2 rounded-full shadow hover:bg-green-600 transition"
                       onClick={() => handleAdd(item.id)}>
-                      Add
+                      +
                     </button>
                   )}
                 </td>

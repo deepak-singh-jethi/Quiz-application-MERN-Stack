@@ -1,14 +1,13 @@
-import React, { memo, useContext } from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { IoCalendarClearOutline } from "react-icons/io5";
-
-import DashBoardHeadings from "./DashBoardHeading";
 import { AuthContext } from "../../../context/AuthContext";
+import { IoCalendarClearOutline } from "react-icons/io5";
+import DashBoardHeadings from "./DashBoardHeading";
 
-export const UpcomingQuizzes = memo(({ data, hideText }) => {
+export const UpcomingQuizzes = ({ data, hideText }) => {
   const { role } = useContext(AuthContext);
 
-  if (data.quiz.length === 0) {
+  if (!data || !data.quiz || data.quiz.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center text-gray-600 text-center p-6 bg-gray-100 border border-gray-200 rounded-lg shadow-md">
         <IoCalendarClearOutline className="text-6xl text-gray-400 mb-4" />
@@ -25,14 +24,14 @@ export const UpcomingQuizzes = memo(({ data, hideText }) => {
   }
 
   return (
-    <div className="bg-gray-800 border-2 rounded-md shadow-sm p-6 container">
+    <div className="bg-gray-800 border-2 rounded-md shadow-sm md:p-4 p-3 container">
       <DashBoardHeadings
         heading="Draft Quizzes(Not Ready)"
         path="Show All"
         link={`${role}/quizzes`}
         hideText={hideText}
       />
-      <div className="flex flex-wrap gap-4 items-center">
+      <div className="flex flex-wrap gap-4 items-center justify-center">
         {data.quiz.map((quiz) => (
           <Link
             key={quiz.id}
@@ -40,21 +39,21 @@ export const UpcomingQuizzes = memo(({ data, hideText }) => {
             className="block p-2 bg-white hover:bg-blue-50 shadow-lg rounded-lg transition-all duration-200 ease-in-out min-w-[270px]">
             <div className="flex items-center">
               <img
-                src="https://dummyimage.com/50.png/09f/fff"
+                src="https://dummyimage.com/50x50.png/09f/fff"
                 alt="Quiz image"
-                className="w-12 h-12 rounded-full object-cover"
+                className="w-8 h-8 rounded-full object-cover"
+                loading="lazy"
               />
               <div className="ml-2">
-                <h3 className="text-xl font-semibold text-gray-900">
+                <h3 className="md:text-lg text-md font-bold text-gray-700">
                   {quiz.name}
                 </h3>
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-gray-500 mt-1 text-sm">
                   Topic: {quiz.topics.join(", ")}
                 </p>
                 {quiz.createdBy.name && (
                   <p className="text-xs text-gray-600 mb-2">
-                    <span className="font-bold text-black">Created by:</span>{" "}
-                    {quiz.createdBy.name}
+                    Created by: {quiz.createdBy.name}
                   </p>
                 )}
               </div>
@@ -64,4 +63,4 @@ export const UpcomingQuizzes = memo(({ data, hideText }) => {
       </div>
     </div>
   );
-});
+};

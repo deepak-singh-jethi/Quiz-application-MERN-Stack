@@ -20,29 +20,28 @@ const initialState = {
   isAuthenticated: false,
 };
 
-// Create an Axios instance
 const axiosInstance = axios.create({
   baseURL: "http://localhost:3000/api/v1",
   withCredentials: true,
 });
 
-// Response interceptor
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    if (error.response && error.response.status === 401) {
+    console.log(error);
+
+    if (
+      error.response &&
+      error.response.status === 401 &&
+      !originalRequest._retry
+    ) {
       originalRequest._retry = true;
       try {
-        // Attempt to refresh the token
-        const response = await axiosInstance.post("/users/refreshToken");
-
-        // Retry the original request
-        return axiosInstance(error.config);
+        await axiosInstance.post("/users/refreshToken");
+        return axiosInstance(originalRequest);
       } catch (refreshError) {
         console.error("Failed to refresh token:", refreshError);
-        // Redirect to login page
-        window.location.href = "/auth";
         return Promise.reject(refreshError);
       }
     }
