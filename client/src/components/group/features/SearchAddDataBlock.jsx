@@ -4,7 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 import { authorizedFetcher, queryClient } from "../../../utils/http";
 import { AuthContext } from "../../../context/AuthContext";
 import AddRemoveTable from "./AddRemoveTable";
-import AddRemoveQuizzes from "./AddRemoveQuizzes";
 
 const SearchAddDataBlock = ({
   handleClose,
@@ -80,16 +79,6 @@ const SearchAddDataBlock = ({
         )}
         {queryData && type !== "quizzes" && (
           <AddRemoveTable
-            queryData={queryData}
-            type={type}
-            preData={preData}
-            addURL={addURL}
-            removeURL={removeURL}
-            handleClose={handleClose}
-          />
-        )}
-        {queryData && type === "quizzes" && (
-          <AddRemoveQuizzes
             queryData={queryData}
             type={type}
             preData={preData}

@@ -1,6 +1,7 @@
-import React, { useState, useContext, memo } from "react";
+import React, { useState, useContext, memo, useEffect, useRef } from "react";
 import { FaSave } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
+import { topics } from "../../../utils/topics";
 
 import { useMutation } from "@tanstack/react-query";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -18,6 +19,7 @@ const QuizDetailForm = ({ data, setEditingQuiz, state }) => {
   const { quizId } = useParams();
   const { role } = useContext(AuthContext);
   const navigate = useNavigate();
+  const selectedTopic = useRef([]);
 
   const [formData, setFormData] = useState({
     name: data.quiz.name || "",
@@ -25,6 +27,7 @@ const QuizDetailForm = ({ data, setEditingQuiz, state }) => {
     perQusMarks: data.quiz.perQusMarks || 1,
     topics: data.quiz.topics || [],
   });
+  const [topicInputs, setTopicInputs] = useState("");
   const [formError, setFormError] = useState("");
 
   const commonMutationConfig = {
@@ -61,6 +64,7 @@ const QuizDetailForm = ({ data, setEditingQuiz, state }) => {
   });
 
   const handleSubmit = () => {
+    console.log(formData);
     if (
       !formData.name ||
       !formData.duration ||
@@ -96,9 +100,39 @@ const QuizDetailForm = ({ data, setEditingQuiz, state }) => {
     return <Loading />;
   }
 
+  useEffect(() => {
+    if (topicInputs.length > 1) {
+      selectedTopic.current = topics.filter((topic) => {
+        return topic.toLowerCase().includes(topicInputs.toLowerCase());
+      });
+    } else {
+      selectedTopic.current = [];
+    }
+  }, [topicInputs]);
+
+  const handleTopicSelect = (topic) => {
+    if (formData.topics.includes(topic)) {
+      setFormData({
+        ...formData,
+        topics: formData.topics.filter((t) => t !== topic),
+      });
+    } else {
+      setFormData({
+        ...formData,
+        topics: [...formData.topics, topic],
+      });
+    }
+  };
+  const handleTopicRemove = (topic) => {
+    setFormData({
+      ...formData,
+      topics: formData.topics.filter((t) => t !== topic),
+    });
+  };
+
   return (
     <div>
-      <div className="grid grid-cols-2 gap-4 mt-4">
+      <div className="grid grid-cols-1 gap-4 mt-4">
         <QuizInput
           label="Name"
           name="name"
@@ -127,17 +161,46 @@ const QuizDetailForm = ({ data, setEditingQuiz, state }) => {
             setFormData({ ...formData, [e.target.name]: e.target.value })
           }
         />
-        <QuizInput
-          label="Topic (js, Java, Oops)"
-          name="topics"
-          value={formData.topics.join(", ")}
-          onChange={(e) =>
-            setFormData({
-              ...formData,
-              topics: e.target.value.split(", "),
-            })
-          }
-        />
+        <div className="relative">
+          <div className="">
+            <label className="block text-green-400 text-sm font-bold mb-2">
+              Selected Topics:
+            </label>
+            {formData.topics.map((topic, index) => (
+              <span
+                key={index}
+                className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+                {topic}
+                <button
+                  type="button"
+                  className="ml-2 text-gray-600 hover:text-gray-800"
+                  onClick={() => handleTopicRemove(topic)}>
+                  &times;
+                </button>
+              </span>
+            ))}
+          </div>
+          <QuizInput
+            label="Topic (js, Java, Oops)"
+            name="topics"
+            value={topicInputs}
+            placeholder="Enter quiz topics"
+            onChange={(e) => setTopicInputs(e.target.value)}
+          />
+        </div>
+        {selectedTopic.current.length > 0 && (
+          <div className="">
+            {selectedTopic.current.map((topic, index) => (
+              <span
+                key={index}
+                className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+                onClick={() => handleTopicSelect(topic)}>
+                {topic}
+              </span>
+            ))}
+          </div>
+        )}
+        <div />
       </div>
       {formError && (
         <p className="text-red-500 text-center mt-2">{formError}</p>

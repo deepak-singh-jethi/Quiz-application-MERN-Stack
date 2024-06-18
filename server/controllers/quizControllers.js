@@ -276,14 +276,6 @@ exports.deleteQuiz = catchAsyncError(async (req, res, next) => {
     return next(new AppError("Password is required", 400));
   }
 
-  // // * get admin data from database
-  // const admin = await User.findById(req.user.id).select("+password");
-
-  // // * compare admin password with the given password
-  // if (!admin || !(await admin.isPasswordCorrect(password, admin.password))) {
-  //   return next(new AppError("Invalid password", 401));
-  // }
-
   // TODO delete all the questions related to the quiz
 
   // TODO delete all the results related to the quiz
@@ -305,7 +297,7 @@ exports.deleteQuiz = catchAsyncError(async (req, res, next) => {
 
 // ! middleware related to questions
 
-//  * adding questions
+//  * adding a new  questions
 exports.addQuestion = catchAsyncError(async (req, res, next) => {
   const quizId = req.params.quizId;
   const questions = req.body; // assuming questions is an array of question objects
@@ -373,17 +365,42 @@ exports.updateQuestion = catchAsyncError(async (req, res, next) => {
   });
 });
 
-// *  deleting a qus
+// * deleting a question for a quiz only
+
+exports.removeQuestion = catchAsyncError(async (req, res, next) => {
+  const { quizId, qusId } = req.params;
+  const quiz = await Quiz.findById(quizId);
+
+  if (!quiz) {
+    return next(new AppError("Quiz not found", 404));
+  }
+  if (!quiz.questions.includes(qusId)) {
+    return next(new AppError("Question not found in the quiz", 404));
+  }
+  quiz.questions.pull(qusId);
+  await quiz.save();
+  res.status(200).json({
+    status: "success",
+    message: "Question Removed Successfully",
+    data: {
+      quiz,
+    },
+  });
+});
+
+// *  deleting a qus from a database
 exports.deleteQuestion = catchAsyncError(async (req, res, next) => {
   const questionId = req.params.qusId;
   console.log(questionId);
 
-  // Step 1: Delete the question from the Question database
+  // option 1: Delete the question from the Question database
   const question = await Question.findByIdAndDelete(questionId);
 
   if (!question) {
     return next(new AppError("Question not found", 404));
   }
+
+  // option=> don't delete question
 
   // Step 2: Remove the reference to the question from any exams that contain it
   await Quiz.updateMany(

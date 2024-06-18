@@ -7,6 +7,7 @@ const QuizSchema = new mongoose.Schema(
       trim: true,
       required: [true, "Quiz Name Can't be empty"],
       unique: [true, "Quiz Name already exist"],
+      lowercase: true,
     },
     questions: [
       {
@@ -18,6 +19,7 @@ const QuizSchema = new mongoose.Schema(
       {
         type: String,
         trim: true,
+        lowercase: true,
       },
     ],
 

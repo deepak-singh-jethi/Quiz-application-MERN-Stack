@@ -41,8 +41,8 @@ const MembersInfo = ({ members, onAdd, openedSection, sectionName, role }) => {
   };
 
   return (
-    <div className="md:m-3 m-1 overflow-x-hidden pb-4 px-1 sm:px-8 md:px-16 lg:px-24">
-      <div className="flex justify-start items-center gap-3 mb-5">
+    <div className="md:m-3 my-10 m-1 overflow-x-hidden  px-1 sm:px-8 md:px-16 lg:px-24 border-b-2 py-8">
+      <div className="flex justify-between items-center gap-3 mb-5">
         <h2 className="text-sm md:text-lg font-semibold  flex items-center">
           <FaUser className="mr-2" />{" "}
           {sectionName.charAt(0).toUpperCase() + sectionName.slice(1)} (
@@ -51,9 +51,9 @@ const MembersInfo = ({ members, onAdd, openedSection, sectionName, role }) => {
 
         {role === "admin" && (
           <button
-            className={`ml-4 ${
+            className={`ml-2 ${
               openedSection !== sectionName ? "bg-blue-500" : "bg-red-600"
-            } bg-blue-500 text-white font-semibold md:py-2 p-1 md:px-3 px-1 rounded-lg ${
+            } bg-blue-500 text-white text-sm font-medium md:py-2 p-1 md:px-3 px-1 rounded-lg ${
               openedSection !== sectionName
                 ? "hover:bg-blue-600"
                 : "hover:bg-red-500"

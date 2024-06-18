@@ -75,7 +75,7 @@ const GroupQuizzesInfo = ({ quizzes, onAdd, openedSection }) => {
         </div>
       </div>
       {/* quizzes info */}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto pb-8">
         {quizzesInfo.length > 0 ? (
           <div
             className={`grid ${
@@ -90,9 +90,9 @@ const GroupQuizzesInfo = ({ quizzes, onAdd, openedSection }) => {
                   <p className="text-xs md:text-md sm:text-[15px] font-medium mb-1">
                     {quiz.quiz.name}
                   </p>
-                  {/* <p className="text-xs sm:text-[15px] text-gray-400">
-                    ID: {quiz.id}
-                  </p> */}
+                  <p className="text-xs sm:text-[15px] text-gray-400">
+                    Scheduled: {new Date(quiz.scheduledFor).toLocaleString()}
+                  </p>
                 </div>
               </div>
             ))}

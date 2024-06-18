@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import React, { useState, useContext, memo } from "react";
+import React, { useState, useContext, memo, useEffect, useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { authorizedCreator, queryClient } from "../../../utils/http";
 import { useNavigate } from "react-router";
@@ -7,6 +7,7 @@ import { AuthContext } from "../../../context/AuthContext";
 
 import QuizInput from "../QuizInput";
 import Button1 from "../../ui/Button1";
+import { topics } from "../../../utils/topics";
 
 const AddNewQus = ({ addQuestion, onCancel, quiz }) => {
   const navigate = useNavigate();
@@ -14,11 +15,14 @@ const AddNewQus = ({ addQuestion, onCancel, quiz }) => {
     question: "",
     options: ["", "", "", ""],
     correctAnswer: "",
+    topic: "",
   });
-  const [error2, setError2] = useState(null);
 
+  const [error2, setError2] = useState(null);
   const { role } = useContext(AuthContext);
   const { quizId } = useParams();
+  const [topicInput, setTopicInput] = useState("");
+  const selectedTopic = useRef([]);
 
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: authorizedCreator,
@@ -57,6 +61,24 @@ const AddNewQus = ({ addQuestion, onCancel, quiz }) => {
     });
   };
 
+  useEffect(() => {
+    if (topicInput.length > 1) {
+      selectedTopic.current = topics.filter((topic) => {
+        return topic.toLowerCase().includes(topicInput.toLowerCase());
+      });
+    } else {
+      selectedTopic.current = [];
+    }
+  }, [topicInput]);
+
+  const handleTopicSelect = (topic) => {
+    if (newQuestion.topic === topic) {
+      setNewQuestion({ ...newQuestion, topic: "" });
+    } else {
+      setNewQuestion({ ...newQuestion, topic });
+    }
+  };
+
   return (
     <div className="bg-white md:p-6 p-3 rounded-lg shadow-md text-gray-700 my-5">
       <div className="w-full text-center">
@@ -79,6 +101,45 @@ const AddNewQus = ({ addQuestion, onCancel, quiz }) => {
           placeholder={`Option ${index + 1}`}
         />
       ))}
+
+      <div className="relative">
+        <div className="">
+          <label className="block text-green-400 text-sm font-bold mb-2">
+            Selected Topics:
+          </label>
+
+          {newQuestion.topic && (
+            <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+              {newQuestion.topic}
+              <button
+                type="button"
+                className="ml-2 text-gray-600 hover:text-gray-800"
+                onClick={() => handleTopicSelect(newQuestion.topic)}>
+                &times;
+              </button>
+            </span>
+          )}
+        </div>
+        <QuizInput
+          label="Topic (js, Java, Oops)"
+          name="topics"
+          value={topicInput}
+          placeholder="Enter quiz topics"
+          onChange={(e) => setTopicInput(e.target.value)}
+        />
+      </div>
+      {selectedTopic.current.length > 0 && (
+        <div className="">
+          {selectedTopic.current.slice(0, 5).map((topic, index) => (
+            <span
+              key={index}
+              className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+              onClick={() => handleTopicSelect(topic)}>
+              {topic}
+            </span>
+          ))}
+        </div>
+      )}
 
       <div className="mb-4">
         <label className="block text-sm md:text-md font-bold my-1">

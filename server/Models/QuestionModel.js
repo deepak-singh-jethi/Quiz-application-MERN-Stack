@@ -5,6 +5,7 @@ const questionSchema = new mongoose.Schema(
     question: {
       type: String,
       required: [true, "Question must have some text"],
+      trim: true,
     },
     options: {
       type: [String],
@@ -27,6 +28,8 @@ const questionSchema = new mongoose.Schema(
     },
     topic: {
       type: String,
+      trim: true,
+      lowercase: true,
     },
   },
   {

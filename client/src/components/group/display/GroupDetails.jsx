@@ -7,9 +7,9 @@ import withDataFetching from "../../../utils/HigerOrderComponent/withDataFetchin
 import MembersInfo from "./MembersInfo";
 import GroupQuizzesInfo from "./GroupQuizzesInfo";
 import SearchAddDataBlock from "../features/SearchAddDataBlock";
+import SearchAddUpdateQuizzes from "../features/SearchAddUpdateQuizzes";
 import Modal from "../../ui/Modal";
 import GroupForm from "../features/GroupForm";
-import SearchAddUpdateQuizzes from "../features/SearchAddUpdateQuizzes";
 
 const Group = ({ data }) => {
   const {

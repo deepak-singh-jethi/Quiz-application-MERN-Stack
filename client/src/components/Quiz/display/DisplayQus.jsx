@@ -46,7 +46,7 @@ const DisplayView = ({ question, index, toggleEditQuestion }) => {
                 className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-200"
                 onClick={() => {
                   mutate({
-                    URL: `http://localhost:3000/api/v1/quiz/questions/${question.id}`,
+                    URL: `http://localhost:3000/api/v1/quiz/question/${quizId}/${question.id}`,
                   });
                   setIsDeleting(false);
                 }}>
