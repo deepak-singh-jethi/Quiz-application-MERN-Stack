@@ -21,7 +21,7 @@ const TeacherInfo = () => {
   const { instructor, groups, quizzes } = data;
 
   return (
-    <div className="mt-6 mx-auto max-w-xl space-y-4">
+    <div className="mt-6 mx-auto max-w-3xl space-y-4">
       <div className="flex justify-center items-center gap-3 md:gap-6 lg:gap-10">
         <h1 className="text-center font-bold text-lg sm:text-xl md:text-2xl text-gray-700">
           Teacher Info
