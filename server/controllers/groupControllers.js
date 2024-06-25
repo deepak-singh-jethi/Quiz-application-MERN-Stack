@@ -1,8 +1,8 @@
 const catchAsyncError = require("../utils/catchAsyncError");
 const AppError = require("../utils/AppError");
+const Quiz = require("../Models/QuizModel");
 const Group = require("../Models/GroupModel");
 const User = require("../Models/UserModel");
-const Quiz = require("../models/QuizModel");
 
 const APIFeatures = require("../utils/APIFeatures");
 
@@ -10,8 +10,6 @@ const APIFeatures = require("../utils/APIFeatures");
 exports.createGroup = catchAsyncError(async (req, res, next) => {
   const id = req.user.id;
   const { name, description } = req.body;
-
-  console.log(name, description);
 
   if (!name || !description) {
     return next(
@@ -231,20 +229,29 @@ exports.updateGroup = catchAsyncError(async (req, res, next) => {
   });
 });
 
-//  * Delete a group (soft delete by setting isDeleted to true)
+//  * Delete or make active a group (soft delete by setting isDeleted to true)
 exports.deleteGroup = catchAsyncError(async (req, res, next) => {
-  const group = await Group.findByIdAndUpdate(
-    req.params.id,
-    { isDeleted: true },
-    {
-      new: true,
-      runValidators: true,
-    }
-  );
+  // const group = await Group.findByIdAndUpdate(
+  //   req.params.id,
+  //   { isDeleted: true },
+  //   {
+  //     new: true,
+  //     runValidators: true,
+  //   }
+  // );
+
+  const group = await Group.findById(req.params.id);
 
   if (!group) {
     return next(new AppError("Group not found", 404));
   }
+  // if group is deleted
+  if (group.isDeleted) {
+    group.isDeleted = false; // make it active
+  } else {
+    group.isDeleted = true; // soft delete
+  }
+  await group.save();
 
   res.status(204).json({
     status: "success",
@@ -381,9 +388,6 @@ exports.removeQuiz = catchAsyncError(async (req, res, next) => {
 exports.changeSchedule = catchAsyncError(async (req, res, next) => {
   const { groupId } = req.params;
   const { quizId, scheduledFor } = req.body;
-
-  console.log({ quizId });
-  console.log({ scheduledFor });
 
   if (!groupId || !quizId || !scheduledFor) {
     return next(

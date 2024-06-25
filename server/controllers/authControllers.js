@@ -102,8 +102,6 @@ exports.refreshToken = catchAsyncError(async (req, res, next) => {
 
   const incomingRefreshToken = req.cookies.refreshToken;
 
-  console.log({ incomingRefreshToken });
-
   // check if token is present
   if (!incomingRefreshToken) {
     return next(new AppError("Unauthorized Request", 400));
@@ -122,7 +120,7 @@ exports.refreshToken = catchAsyncError(async (req, res, next) => {
   }
 
   //  check if incoming refresh token is same as database refresh token
-  console.log(currentUser.refreshToken);
+
   if (currentUser.refreshToken !== incomingRefreshToken) {
     return next(new AppError("Refresh token is expired or invalid", 400));
   }

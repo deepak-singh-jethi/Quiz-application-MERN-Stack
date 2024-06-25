@@ -21,12 +21,6 @@ const NavBar = memo(() => {
             Quiz
           </Link>
         )}
-        {role === "admin" && (
-          <Link className={navBtnClass}>
-            <IoAddCircleSharp className="text-lg sm:text-2xl md:text-3xl" />
-            Teacher
-          </Link>
-        )}
       </div>
       <button className="border-2 rounded-full p-2 transition-colors duration-300 hover:bg-gray-600 hover:text-white">
         <FaBuildingUser className="text-lg sm:text-2xl md:text-3xl  " />

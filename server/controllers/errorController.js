@@ -5,7 +5,6 @@ const handleCastErrorDB = (err) => {
   return new AppError(message, 400);
 };
 const handleDuplicateErrorDB = (err) => {
-  console.log(err);
   const message = `${
     err.keyValue.name || err.keyValue.question || err.keyValue.email
   } Already exist🙂‍↔️`;

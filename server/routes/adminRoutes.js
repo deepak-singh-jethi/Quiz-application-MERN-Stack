@@ -11,9 +11,10 @@ router.use(authControllers.restrictTo("admin"));
 
 router
   .route("/:userId")
-  .patch(adminControllers.updateUser)
-  .delete(adminControllers.deleteUser);
+  .patch(adminControllers.updateUser) // update a teachers info
+  .delete(adminControllers.deleteUser); // delete a teacher
 
+// Add a new teacher
 router.route("/newInstructor").post(adminControllers.newInstructor);
 
 module.exports = router;

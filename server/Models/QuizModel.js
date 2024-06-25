@@ -66,7 +66,7 @@ const QuizSchema = new mongoose.Schema(
   }
 );
 
-QuizSchema.index({ name: 1 });
+// QuizSchema.index({ name: 1 });
 
 const Quiz = mongoose.model("Quiz", QuizSchema);
 module.exports = Quiz;

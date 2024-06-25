@@ -1,11 +1,29 @@
 const User = require("../Models/UserModel");
+const Group = require("../Models/GroupModel");
+const Result = require("../Models/ResultModel");
+const Quiz = require("../Models/QuizModel");
+
 const catchAsyncError = require("../utils/catchAsyncError");
 const AppError = require("../utils/AppError");
 const APIFeatures = require("../utils/APIFeatures");
 
-// * user controllers
+// * get self info
+exports.getMe = catchAsyncError(async (req, res, next) => {
+  const userId = req.user.id;
 
-// updateMe User
+  const user = await User.findById(userId).select("-__v -refreshToken");
+
+  if (!user) return next(new AppError("User not found", 404));
+
+  res.status(200).json({
+    message: "User Found",
+    data: {
+      user,
+    },
+  });
+});
+
+// * updateMe User
 exports.updateMe = catchAsyncError(async (req, res, next) => {
   const userId = req.user.id;
 
@@ -24,7 +42,7 @@ exports.updateMe = catchAsyncError(async (req, res, next) => {
   });
 });
 
-// deleteMe User
+// * deleteMe User
 exports.deleteMe = catchAsyncError(async (req, res, next) => {
   // in place of deleting user, we can just set the isActive to false
   const userId = req.user.id;
@@ -36,24 +54,6 @@ exports.deleteMe = catchAsyncError(async (req, res, next) => {
     status: "success",
     data: {
       message: "Now your profile or all activities are not visible to others ",
-    },
-  });
-});
-
-// * common controllers
-
-// * get user Details
-exports.getUser = catchAsyncError(async (req, res, next) => {
-  const userId = req.params.userId;
-
-  const user = await User.findById(userId).select("-__v -role");
-
-  if (!user) return next(new AppError("User not found", 404));
-
-  res.status(200).json({
-    message: "User Found",
-    data: {
-      user,
     },
   });
 });
@@ -82,10 +82,6 @@ exports.getAllUsers = catchAsyncError(async (req, res, next) => {
 // * search user based on email or name
 exports.searchUser = catchAsyncError(async (req, res, next) => {
   const { search, role } = req.query;
-
-  console.log({ search }, { role });
-
-  console.log(search, role);
 
   if (!search || search.trim() === "") {
     return next(
@@ -137,17 +133,51 @@ exports.searchUser = catchAsyncError(async (req, res, next) => {
   });
 });
 
-exports.getMe = catchAsyncError(async (req, res, next) => {
-  const userId = req.user.id;
+// * get all info about a instructor =>all  groups and  quizzes
 
-  const user = await User.findById(userId).select("-__v -refreshToken");
+exports.getInstructor = catchAsyncError(async (req, res, next) => {
+  const { id } = req.params;
 
-  if (!user) return next(new AppError("User not found", 404));
+  // Fetch data concurrently
+  const [instructor, groups, quizzes] = await Promise.all([
+    User.findById(id).select("-__v -refreshToken -password"),
+    Group.find({ instructors: { $in: id } }).select("name"),
+    Quiz.find({ createdBy: id }).select("name"),
+  ]);
+
+  // Handle case where instructor is not found
+  if (!instructor) {
+    return next(new AppError("Instructor not found", 404));
+  }
+
+  // Respond with the data
+  res.status(200).json({
+    message: "success",
+    data: {
+      instructor,
+      groups,
+      quizzes,
+    },
+  });
+});
+
+// * get all info about a student => groups results of quizzes
+exports.getStudent = catchAsyncError(async (req, res, next) => {
+  const student = await User.findById(req.params.id);
+
+  if (!student) return next(new AppError("Student not found", 404));
+
+  // get all groups where student is part of
+  const groups = await Group.find({ members: { $in: student._id } });
+  // get all results of quizzes where student is the participant
+  const results = await Result.find({ user: student._id });
 
   res.status(200).json({
-    message: "User Found",
+    message: "success",
     data: {
-      user,
+      student,
+      groups,
+      results,
     },
   });
 });

@@ -62,7 +62,7 @@ const EditingView = ({ question, toggleEditQuestion }) => {
 
   const handleSave = () => {
     mutate({
-      URL: `http://localhost:3000/api/v1/quiz/questions/${qus.id}`,
+      URL: `http://localhost:3000/api/v1/questions/${qus.id}`,
       body: qus,
     });
   };

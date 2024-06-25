@@ -11,9 +11,7 @@ export const UpcomingQuizzes = ({ data, hideText }) => {
     return (
       <div className="flex flex-col items-center justify-center text-gray-600 text-center p-6 bg-gray-100 border border-gray-200 rounded-lg shadow-md">
         <IoCalendarClearOutline className="text-6xl text-gray-400 mb-4" />
-        <p className="text-lg">
-          You don't have any quizzes in the upcoming section...
-        </p>
+        <p className="text-lg">You don't have any quizzes in the Draft...</p>
         <Link
           to={`/${role}/quizzes/createQuiz`}
           className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700 transition duration-300">
@@ -26,7 +24,7 @@ export const UpcomingQuizzes = ({ data, hideText }) => {
   return (
     <div className="bg-gray-800 border-2 rounded-md shadow-sm md:p-4 p-3 container">
       <DashBoardHeadings
-        heading="Draft Quizzes(Not Ready)"
+        heading="Draft Quizzes"
         path="Show All"
         link={`${role}/quizzes`}
         hideText={hideText}

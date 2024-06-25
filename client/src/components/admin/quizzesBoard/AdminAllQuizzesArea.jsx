@@ -62,7 +62,7 @@ const AdminAllFreeQuizzes = withDataFetching(QuizzesList, {
   additionalProps: { hideText: true },
 });
 export const AdminAllReadyToUseQuizzes = withDataFetching(QuizzesList, {
-  URL: "http://localhost:3000/api/v1/quiz/admin/published",
+  URL: "http://localhost:3000/api/v1/quiz/admin/published?isPublished=true",
   queryKey: ["AllReadyToUseQuizzes"],
   additionalProps: { hideText: true },
 });

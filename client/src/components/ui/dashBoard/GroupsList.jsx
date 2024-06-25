@@ -19,11 +19,6 @@ export const GroupsList = ({ data, hideText }) => {
         <div className="flex flex-col items-center justify-start h-full p-6">
           <p className="text-gray-300 text-xl mb-4">No groups found</p>
           <RiEmotionUnhappyLine className="text-gray-300 text-6xl" />
-          <Link
-            to={`${role}/groups/createNewGroup`}
-            className="text-gray-300 text-lg mt-4 underline hover:text-gray-400">
-            Create a group
-          </Link>
         </div>
       ) : (
         <div className="flex flex-wrap gap-3 md:gap-4 justify-center">

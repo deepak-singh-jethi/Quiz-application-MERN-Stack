@@ -88,7 +88,7 @@ const Quiz = ({ data }) => {
         <button
           onClick={handleToggleAddNewQus}
           className="py-2 px-3  bg-gray-600 hover:bg-gray-500 text-stone-100  rounded transition duration-300 ease-in-out w-fit ">
-          {`${addNewQusOpen ? "Close" : "Add Question + "}`}
+          {`${addNewQusOpen ? "Close" : "Manage Questions "}`}
         </button>
       </div>
 
@@ -102,7 +102,7 @@ const Quiz = ({ data }) => {
       )}
 
       {/* questions card */}
-      {data.quiz && data.quiz.questions.length > 0 && (
+      {data.quiz && data.quiz.questions.length > 0 && !addNewQusOpen && (
         <div className="mt-6">
           {data.quiz.questions.map((question, qIndex) => (
             <QuestionCard

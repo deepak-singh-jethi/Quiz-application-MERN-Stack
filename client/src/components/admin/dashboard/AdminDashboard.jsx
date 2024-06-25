@@ -30,7 +30,7 @@ const AdminDashboard = () => {
 };
 
 const AdminTeachersList = withDataFetching(TeachersList, {
-  queryKey: ["teachers"],
+  queryKey: ["4-teachers"],
   URL: "http://localhost:3000/api/v1/users?role=instructor&limit=4",
 });
 
@@ -50,7 +50,7 @@ const AdminStudentsList = withDataFetching(StudentList, {
 });
 const AdminGroupsList = withDataFetching(GroupsList, {
   URL: "http://localhost:3000/api/v1/group?limit=2",
-  queryKey: ["5-groups_list"],
+  queryKey: ["groups", "5-groups_list"],
 });
 
 export default AdminDashboard;

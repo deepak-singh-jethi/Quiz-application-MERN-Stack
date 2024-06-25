@@ -2,7 +2,7 @@ const catchAsyncError = require("../utils/catchAsyncError");
 const AppError = require("../utils/AppError");
 const APIFeatures = require("../utils/APIFeatures");
 const User = require("../Models/UserModel");
-const Quiz = require("../models/QuizModel");
+const Quiz = require("../Models/QuizModel");
 const Result = require("../Models/ResultModel");
 const Question = require("../Models/QuestionModel");
 

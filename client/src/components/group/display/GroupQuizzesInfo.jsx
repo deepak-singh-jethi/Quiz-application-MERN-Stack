@@ -39,7 +39,7 @@ const GroupQuizzesInfo = ({ quizzes, onAdd, openedSection }) => {
 
   return (
     <div className="md:m-3 m-1 overflow-x-hidden pb-4 px-1 sm:px-8 md:px-16 lg:px-24">
-      <div className="flex justify-start items-center gap-3 mb-5">
+      <div className="flex justify-between items-center gap-3 mb-5">
         <h2 className="text-sm md:text-lg font-semibold mb-2 flex items-center">
           <FaBook className="mr-2" /> Quizzes ({quizzesInfo.length})
         </h2>
@@ -91,7 +91,11 @@ const GroupQuizzesInfo = ({ quizzes, onAdd, openedSection }) => {
                     {quiz.quiz.name}
                   </p>
                   <p className="text-xs sm:text-[15px] text-gray-400">
-                    Scheduled: {new Date(quiz.scheduledFor).toLocaleString()}
+                    {new Date(quiz.scheduledFor) < new Date()
+                      ? `Live`
+                      : `Scheduled : ${new Date(
+                          quiz.scheduledFor
+                        ).toLocaleString()}`}
                   </p>
                 </div>
               </div>

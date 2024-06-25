@@ -58,11 +58,4 @@ router.get(
   quizController.getAllFreeQuizByInstructor
 );
 
-// 2. handling the questions of a quiz
-router.post("/questions/:quizId", quizController.addQuestion);
-router.get("/questions/:qusId", quizController.getQuestion);
-router.patch("/questions/:qusId", quizController.updateQuestion);
-router.delete("/questions/:qusId", quizController.deleteQuestion);
-router.delete("/question/:quizId/:qusId", quizController.removeQuestion);
-
 module.exports = router;

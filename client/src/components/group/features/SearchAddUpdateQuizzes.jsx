@@ -93,11 +93,11 @@ const SearchAddUpdateQuizzes = ({ handleClose, preData }) => {
   };
 
   return (
-    <div className="p-2 md:p-6 bg-white rounded-lg shadow-md text-gray-800 max-w-4xl md:mx-auto">
+    <div className="p-1 md:p-3 bg-white rounded-lg shadow-md text-gray-800 max-w-4xl md:mx-auto">
       <nav className="mb-6">
         <input
           type="text"
-          placeholder="Search for quizzes..."
+          placeholder="Search for quizzes that you wants to add or delete.."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="px-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-600"

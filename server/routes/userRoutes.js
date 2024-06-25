@@ -9,21 +9,27 @@ router.post("/login", authController.login);
 router.post("/register", authController.register);
 router.post("/refreshToken", authController.refreshToken);
 
-// protect and restrict middleware => only verified users can access these routes
 router.use(authController.protect);
 
-// verified admin , users can get all users
+router.get("/getMe", userControllers.getMe);
+
 router
   .route("/")
   .get(
     authController.restrictTo("admin", "instructor"),
     userControllers.getAllUsers
   );
-router.get("/getMe", userControllers.getMe);
-router.post("/logout", authController.logout);
 
-// verified admin , users can get users info
-router.get("/:userId", userControllers.getUser);
+router.get(
+  "/instructor/:id",
+  authController.restrictTo("admin", "instructor"),
+
+  userControllers.getInstructor
+);
+
+// router.get("/user/:id", authController.restrictTo("admin", "instructor"));
+
+router.post("/logout", authController.logout);
 
 router.get(
   "/search/users",
@@ -31,9 +37,7 @@ router.get(
   userControllers.searchUser
 );
 
-// only user can update and delete
 router.use(authController.restrictTo("user"));
-
 router.patch("/updateMe", userControllers.updateMe);
 router.delete("/deleteMe", userControllers.deleteMe);
 

@@ -12,6 +12,7 @@ const data = {
 const NewQuiz = () => {
   return (
     <div className="mx-4 px-4 py-2 border-2 border-gray-800 rounded">
+      New Quiz
       <QuizDetailForm state="create" data={data} />
     </div>
   );

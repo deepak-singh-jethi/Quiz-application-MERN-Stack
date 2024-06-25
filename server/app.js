@@ -9,6 +9,7 @@ const userRoutes = require("./routes/userRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const quizRoutes = require("./routes/quizRoutes");
 const resultRoutes = require("./routes/resultRoute");
+const questionRoutes = require("./routes/questionRoutes");
 
 const AppError = require("./utils/AppError");
 const errorController = require("./controllers/errorController");
@@ -38,6 +39,7 @@ app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/admin", adminRoutes);
 app.use("/api/v1/quiz", quizRoutes);
 app.use("/api/v1/group", groupRoutes);
+app.use("/api/v1/questions", questionRoutes);
 
 // * Error handling => for undefined routes
 app.all("*", (req, res, next) => {
