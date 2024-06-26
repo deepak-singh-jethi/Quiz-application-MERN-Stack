@@ -14,7 +14,7 @@ const tdStyle = "text-xs sm:text-sm p-2 border-b  border-gray-300";
 const DisplayTeachers = () => {
   const [paginationData, setPaginationData] = useState({
     startIndex: 0,
-    maxItemNumber: 2,
+    maxItemNumber: 15,
     currentPage: 1,
   });
 

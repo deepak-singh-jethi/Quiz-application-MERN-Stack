@@ -52,7 +52,7 @@ const QuestionCard = ({ question, questionState, setQuestionState }) => {
       <div
         className="flex justify-between items-center cursor-pointer"
         onClick={() => toggleQuestionExpand(question.id)}>
-        <h3 className="text-md md:text-lg xl:text-xl font-semibold">
+        <h3 className="text-sm sm:text-md md:text-lg font-semibold">
           {question.question}
         </h3>
         {isExpanded && questionId === question.id ? (

@@ -5,6 +5,9 @@ import { queryClient } from "../../../utils/http";
 import { useMutation } from "@tanstack/react-query";
 import Loading from "../../ui/Loading";
 import ErrorBlock from "../../ui/ErrorBlock";
+import { categories } from "../../../utils/category";
+const inputStyle =
+  "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400";
 
 const GroupForm = ({
   onClose,
@@ -13,6 +16,7 @@ const GroupForm = ({
   formInputs = {
     name: "",
     description: "",
+    category: "ukpsc",
   },
 }) => {
   const navigate = useNavigate();
@@ -29,6 +33,7 @@ const GroupForm = ({
       setFormData({
         name: "",
         description: "",
+        category: "",
       });
       navigate(`/admin/groups/${data.group.id}`);
       onClose();
@@ -43,6 +48,7 @@ const GroupForm = ({
       setFormData({
         name: "",
         description: "",
+        category: "",
       });
       navigate(`/admin/groups/${data.group.id}`);
       onClose();
@@ -62,11 +68,11 @@ const GroupForm = ({
       });
       return;
     }
-    setFormError("");
     mutate({
       URL: "http://localhost:3000/api/v1/group",
       body: formData,
     });
+    setFormError("");
   };
 
   if (isPending) {
@@ -89,8 +95,21 @@ const GroupForm = ({
             name="name"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className={inputStyle}
           />
+          <label htmlFor="category">Category:</label>
+          <select
+            id="category"
+            name="category"
+            className={inputStyle}
+            value={formData.category}
+            onChange={(e) =>
+              setFormData({ ...formData, category: e.target.value })
+            }>
+            {categories.map((category) => (
+              <option value={categories}>{category.toUpperCase()}</option>
+            ))}
+          </select>
           <textarea
             placeholder="Description"
             name="description"
@@ -98,7 +117,7 @@ const GroupForm = ({
             onChange={(e) =>
               setFormData({ ...formData, description: e.target.value })
             }
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className={inputStyle}
           />
           <div className="flex gap-3">
             <button className="mt-4 w-full bg-green-500 text-white font-semibold py-2 rounded-lg hover:bg-green-600 transition duration-300">

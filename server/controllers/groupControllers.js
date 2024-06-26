@@ -9,7 +9,7 @@ const APIFeatures = require("../utils/APIFeatures");
 // * Create a new group
 exports.createGroup = catchAsyncError(async (req, res, next) => {
   const id = req.user.id;
-  const { name, description } = req.body;
+  const { name, description, category } = req.body;
 
   if (!name || !description) {
     return next(
@@ -20,6 +20,7 @@ exports.createGroup = catchAsyncError(async (req, res, next) => {
   const group = await Group.create({
     name,
     description,
+    category,
     createdBy: req.user.id,
   });
 
@@ -129,7 +130,6 @@ exports.getGroupsByInstructor = catchAsyncError(async (req, res, next) => {
 });
 
 // * get all groups of a student
-
 exports.getAllGroupsByStudent = catchAsyncError(async (req, res, next) => {
   const studentId = req.user.id;
   // find user

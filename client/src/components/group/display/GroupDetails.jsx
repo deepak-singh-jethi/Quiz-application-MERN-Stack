@@ -24,8 +24,16 @@ import withDataFetching from "../../../utils/HigerOrderComponent/withDataFetchin
 import { useMutation } from "@tanstack/react-query";
 
 const Group = ({ data }) => {
-  const { _id, name, description, members, quizzes, instructors, isDeleted } =
-    data.group;
+  const {
+    _id,
+    name,
+    description,
+    category,
+    members,
+    quizzes,
+    instructors,
+    isDeleted,
+  } = data.group;
   const { role } = useContext(AuthContext);
   const [openedSection, setOpenedSection] = useState("");
   const [groupState, setGroupState] = useState("display");
@@ -67,6 +75,7 @@ const Group = ({ data }) => {
                 {name}
               </h1>
               <p className="text-sm md:text-lg">{description}</p>
+              <p className="text-sm md:text-lg">{category}</p>
             </div>
             {role === "admin" && (
               <>
