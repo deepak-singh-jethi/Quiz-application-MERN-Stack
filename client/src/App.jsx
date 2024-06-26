@@ -43,6 +43,7 @@ const UnauthorizedPage = lazy(() =>
 import Loading from "./components/ui/Loading.jsx";
 import TeachersArea from "./components/admin/TeacherBoard/Display/TeachersArea.jsx";
 import TeacherInfo from "./components/admin/TeacherBoard/Display/TeacherInfo.jsx";
+import AddTeacher from "./components/admin/TeacherBoard/Features/AddTeacher.jsx";
 const AdminAllGroupArea = lazy(() =>
   import("./components/admin/groupBoard/AdminAllGroupArea.jsx")
 );
@@ -137,8 +138,11 @@ const router = createBrowserRouter(
         <Route path="results/:id" element={<h1>1 Result</h1>} />
         <Route path="students" element={<h1>Students page</h1>} />
         <Route path="students/:studentId" element={<h1>Student Detail</h1>} />
-        <Route path="teachers" element={<TeachersArea />} />
-        <Route path="teachers/:id" element={<TeacherInfo />} />
+        <Route path="teachers">
+          <Route index element={<TeachersArea />} />
+          <Route path="new" element={<AddTeacher />} />
+          <Route path=":id" element={<TeacherInfo />} />
+        </Route>
       </Route>
 
       {/* Instructor Routes */}

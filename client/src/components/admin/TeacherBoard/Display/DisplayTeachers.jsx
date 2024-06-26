@@ -7,13 +7,14 @@ import { Link } from "react-router-dom";
 
 const URL = "http://localhost:3000/api/v1/users?role=instructor";
 const thStyle =
-  "text-left py-3 px-4 bg-gray-200 text-gray-600 font-bold uppercase text-sm border-b border-gray-300";
-const tdStyle = "py-3 px-4 border-b  border-gray-300";
+  "text-left  p-2 bg-gray-200 text-gray-600 font-bold uppercase text-xs sm:text-sm border-b border-gray-300";
+
+const tdStyle = "text-xs sm:text-sm p-2 border-b  border-gray-300";
 
 const DisplayTeachers = () => {
   const [paginationData, setPaginationData] = useState({
     startIndex: 0,
-    maxItemNumber: 15,
+    maxItemNumber: 2,
     currentPage: 1,
   });
 
@@ -45,9 +46,9 @@ const DisplayTeachers = () => {
   const items = teachers.users.slice(startIndex, startIndex + maxItemNumber);
 
   return (
-    <div className="p-4 md:p-6 lg:p-8 bg-white shadow-md rounded-lg">
+    <div className="p-2 md:p-4 lg:p-6 bg-white shadow-md rounded-lg">
       <h1 className="text-gray-700 text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold border-b pb-2 md:mt-4 mb-4 text-center">
-        All Teachers
+        All Teachers ({teachers.users.length})
       </h1>
       <table className="min-w-full bg-white border border-gray-300 rounded-lg">
         <thead>

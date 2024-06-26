@@ -1,4 +1,5 @@
 import React, { useState, lazy, Suspense } from "react";
+import { Link } from "react-router-dom";
 const AddTeacher = lazy(() => import("../Features/AddTeacher"));
 const DisplayTeachers = lazy(() => import("./DisplayTeachers"));
 
@@ -28,13 +29,13 @@ const TeachersArea = () => {
         ">
           Display
         </button>
-        <button
-          onClick={() => setPageState("add")}
+        <Link
+          to="new"
           className="
         bg-gray-600 hover:bg-gray-700 text-white font-bold md:py-2 py-1 md:px-4 px-2 rounded
         focus:outline-none focus:ring focus:ring-gray-500">
           Add
-        </button>
+        </Link>
       </div>
       {/* content */}
       <div
