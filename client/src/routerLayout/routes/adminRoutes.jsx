@@ -1,10 +1,9 @@
-import ProtectedRoute from "../../utils/HigerOrderComponent/ProtectedRoute.jsx";
 import React, { lazy, Suspense } from "react";
 
-import { Route, Routes } from "react-router-dom";
+import { Route } from "react-router-dom";
 
 import Loading from "../../components/ui/Loading.jsx";
-const AdminLayout = lazy(() => import("../AdminLayout.jsx"));
+
 const AdminAllQuizzesArea = lazy(() =>
   import("../../components/admin/quizzesBoard/AdminAllQuizzesArea.jsx")
 );

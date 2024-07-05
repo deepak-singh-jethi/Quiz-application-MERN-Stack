@@ -1,6 +1,6 @@
 import React, { lazy, Suspense } from "react";
 import Loading from "../../components/ui/Loading.jsx";
-import { Route, Routes } from "react-router-dom";
+import { Route } from "react-router-dom";
 
 const QuizDetails = lazy(() => import("../../components/quiz/QuizDetails.jsx"));
 

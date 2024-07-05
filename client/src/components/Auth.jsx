@@ -15,8 +15,6 @@ const Auth = () => {
     confirmPassword: "",
   });
 
-  const { name, email, password, confirmPassword } = formData;
-
   const [error, setError] = useState("");
   const [operation, setOperation] = useState("login");
 
@@ -58,6 +56,8 @@ const Auth = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(""); // Clear any existing error messages
+
+    const { name, email, password, confirmPassword } = formData;
 
     // Validation based on operation (login or register)
     if (operation === "register") {

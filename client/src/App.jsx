@@ -1,4 +1,6 @@
 import React, { lazy, Suspense } from "react";
+import "./App.css";
+
 import {
   Route,
   createBrowserRouter,
@@ -6,39 +8,36 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
+// Tanstack Query for data fetching and caching
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./utils/http.js";
-import "./App.css";
 
-// main root page
-import Root from "./routerLayout/Root.jsx";
-
-// HOC for Protection of routes
+import { AuthProvider } from "./context/AuthContext.jsx";
+import Root from "./routerLayout/Root";
 import ProtectedRoute from "./utils/HigerOrderComponent/ProtectedRoute.jsx";
 
 // Layouts
-import HomeLayout from "./routerLayout/HomeLayout.jsx";
-import AuthLayout from "./routerLayout/AuthLayout.jsx";
+import HomeLayout from "./routerLayout/HomeLayout";
+import AuthLayout from "./routerLayout/AuthLayout";
 
-// Lazy load Main layouts
-const AuthProvider = lazy(() => import("./context/AuthContext.jsx"));
+// Lazy load layouts
 const AdminLayout = lazy(() => import("./routerLayout/AdminLayout.jsx"));
 const UserLayout = lazy(() => import("./routerLayout/UserLayout.jsx"));
 const InstructorLayout = lazy(() =>
   import("./routerLayout/InstructorLayout.jsx")
 );
 
-// routes function which return routes for different roles
-import { adminRoutes } from "./routerLayout/routes/adminRoutes.jsx";
-import { instructorRoutes } from "./routerLayout/routes/instructorRoutes.jsx";
-import { userRoutes } from "./routerLayout/routes/userRoutes.jsx";
-
 // UI components
 const ErrorPage = lazy(() => import("./components/ui/ErrorPage.jsx"));
+const Loading = lazy(() => import("./components/ui/Loading.jsx"));
 const UnauthorizedPage = lazy(() =>
   import("./components/ui/UnauthorizedPage.jsx")
 );
-import Loading from "./components/ui/Loading.jsx";
+
+// routes for different role
+import { adminRoutes } from "./routerLayout/routes/adminRoutes.jsx";
+import { instructorRoutes } from "./routerLayout/routes/instructorRoutes.jsx";
+import { userRoutes } from "./routerLayout/routes/userRoutes.jsx";
 
 // Define router with all routes
 const router = createBrowserRouter(
@@ -108,7 +107,6 @@ const router = createBrowserRouter(
     </Route>
   )
 );
-
 function App() {
   return (
     <AuthProvider>
@@ -118,5 +116,4 @@ function App() {
     </AuthProvider>
   );
 }
-
 export default App;
