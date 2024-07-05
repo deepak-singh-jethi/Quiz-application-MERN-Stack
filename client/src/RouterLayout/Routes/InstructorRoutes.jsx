@@ -1,34 +1,27 @@
-import React, { Suspense, lazy } from "react";
-import { Route, Routes } from "react-router";
-import ProtectedRoute from "../../utils/HigerOrderComponent/ProtectedRoute";
-import Loading from "../../components/ui/Loading";
+import React, { lazy, Suspense } from "react";
+import Loading from "../../components/ui/Loading.jsx";
+import { Route, Routes } from "react-router-dom";
 
-const InstructorLayout = lazy(() => import("../InstructorLayout"));
+const QuizDetails = lazy(() => import("../../components/quiz/QuizDetails.jsx"));
+
+const NewQuiz = lazy(() => import("../../components/quiz/NewQuiz.jsx"));
+
+const GroupDetails = lazy(() =>
+  import("../../components/group/display/GroupDetails.jsx")
+);
 
 const InstructorAllQuizzesArea = lazy(() =>
-  import("../../components/Instructor/quizzesBoard/InstructorAllQuizzesArea")
+  import(
+    "../../components/Instructor/quizzesBoard/InstructorAllQuizzesArea.jsx"
+  )
 );
-const InstructorAllGroupArea = () =>
-  import("../../components/Instructor/groupBoard/InstructorAllGroupArea");
-const GroupDetails = () =>
-  import("../../components/group/display/GroupDetails");
-const QuizDetails = () => import("../../components/Quiz/QuizDetails");
-const NewQuiz = () => import("../../components/Quiz/NewQuiz");
+const InstructorAllGroupArea = lazy(() =>
+  import("../../components/Instructor/groupBoard/InstructorAllGroupArea.jsx")
+);
 
-const InstructorRoutes = () => {
+export const instructorRoutes = () => {
   return (
-    <Route
-      index
-      element={
-        <ProtectedRoute
-          element={
-            <Suspense fallback={<Loading />}>
-              <InstructorLayout />
-            </Suspense>
-          }
-          expectedRoles={["instructor"]}
-        />
-      }>
+    <>
       <Route
         path="quizzes"
         element={
@@ -71,8 +64,6 @@ const InstructorRoutes = () => {
       />
       <Route path="results" element={<h1>Results</h1>} />
       <Route path="results/:id" element={<h1>1 Result</h1>} />
-    </Route>
+    </>
   );
 };
-
-export default InstructorRoutes;

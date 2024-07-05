@@ -31,6 +31,8 @@ async function createToken(id) {
 exports.register = catchAsyncError(async (req, res, next) => {
   req.body.role = "user";
 
+  console.log(req.body);
+
   const newUser = await User.create(req.body);
 
   const { accessToken, refreshToken } = await createToken(newUser._id);
@@ -60,6 +62,8 @@ exports.register = catchAsyncError(async (req, res, next) => {
 // * login
 exports.login = catchAsyncError(async (req, res, next) => {
   const { email, password } = req.body;
+
+  console.log({ email });
 
   if (!email || !password) {
     return next(new AppError("Please provide email and password", 400));

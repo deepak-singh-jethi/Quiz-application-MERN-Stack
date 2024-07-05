@@ -94,6 +94,7 @@ export async function authorizedCreator({ URL, body = {} }) {
 }
 
 export async function authorizer({ URL, body = {} }) {
+  console.log({ body });
   try {
     const response = await axiosInstance.post(URL, body);
     return response.data.data;

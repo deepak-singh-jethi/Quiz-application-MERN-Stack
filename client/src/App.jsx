@@ -5,54 +5,40 @@ import {
   createRoutesFromElements,
   RouterProvider,
 } from "react-router-dom";
+
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./utils/http.js";
 import "./App.css";
-import { AuthProvider } from "./context/AuthContext.jsx";
-import Root from "./RouterLayout/Root";
+
+// main root page
+import Root from "./routerLayout/Root.jsx";
+
+// HOC for Protection of routes
 import ProtectedRoute from "./utils/HigerOrderComponent/ProtectedRoute.jsx";
 
 // Layouts
-import HomeLayout from "./RouterLayout/HomeLayout";
-import AuthLayout from "./RouterLayout/AuthLayout";
+import HomeLayout from "./routerLayout/HomeLayout.jsx";
+import AuthLayout from "./routerLayout/AuthLayout.jsx";
 
-// Lazy load layouts
-const AdminLayout = lazy(() => import("./RouterLayout/AdminLayout.jsx"));
-const UserLayout = lazy(() => import("./RouterLayout/UserLayout.jsx"));
+// Lazy load Main layouts
+const AuthProvider = lazy(() => import("./context/AuthContext.jsx"));
+const AdminLayout = lazy(() => import("./routerLayout/AdminLayout.jsx"));
+const UserLayout = lazy(() => import("./routerLayout/UserLayout.jsx"));
 const InstructorLayout = lazy(() =>
-  import("./RouterLayout/InstructorLayout.jsx")
+  import("./routerLayout/InstructorLayout.jsx")
 );
 
-// Quiz components
-const QuizDetails = lazy(() => import("./components/Quiz/QuizDetails.jsx"));
-const NewQuiz = lazy(() => import("./components/Quiz/NewQuiz.jsx"));
-const InstructorAllQuizzesArea = lazy(() =>
-  import("./components/Instructor/quizzesBoard/InstructorAllQuizzesArea.jsx")
-);
-const AdminAllQuizzesArea = lazy(() =>
-  import("./components/admin/quizzesBoard/AdminAllQuizzesArea.jsx")
-);
+// routes function which return routes for different roles
+import { adminRoutes } from "./routerLayout/routes/adminRoutes.jsx";
+import { instructorRoutes } from "./routerLayout/routes/instructorRoutes.jsx";
+import { userRoutes } from "./routerLayout/routes/userRoutes.jsx";
 
 // UI components
 const ErrorPage = lazy(() => import("./components/ui/ErrorPage.jsx"));
 const UnauthorizedPage = lazy(() =>
   import("./components/ui/UnauthorizedPage.jsx")
 );
-
-// Fallback for Suspense
 import Loading from "./components/ui/Loading.jsx";
-import TeachersArea from "./components/admin/TeacherBoard/Display/TeachersArea.jsx";
-import TeacherInfo from "./components/admin/TeacherBoard/Display/TeacherInfo.jsx";
-import AddTeacher from "./components/admin/TeacherBoard/Features/AddTeacher.jsx";
-const AdminAllGroupArea = lazy(() =>
-  import("./components/admin/groupBoard/AdminAllGroupArea.jsx")
-);
-const InstructorAllGroupArea = lazy(() =>
-  import("./components/Instructor/groupBoard/InstructorAllGroupArea.jsx")
-);
-const GroupDetails = lazy(() =>
-  import("./components/group/display/GroupDetails.jsx")
-);
 
 // Define router with all routes
 const router = createBrowserRouter(
@@ -85,64 +71,7 @@ const router = createBrowserRouter(
             expectedRoles={["admin"]}
           />
         }>
-        <Route
-          path="quizzes"
-          element={
-            <Suspense fallback={<Loading />}>
-              <AdminAllQuizzesArea />
-            </Suspense>
-          }
-        />
-        <Route
-          path="quizzes/:quizId"
-          element={
-            <Suspense fallback={<Loading />}>
-              <QuizDetails />
-            </Suspense>
-          }
-        />
-        <Route
-          path="quizzes/createQuiz"
-          element={
-            <Suspense fallback={<Loading />}>
-              <NewQuiz />
-            </Suspense>
-          }
-        />
-        <Route
-          path="groups"
-          element={
-            <Suspense fallback={<Loading />}>
-              <AdminAllGroupArea />
-            </Suspense>
-          }
-        />
-        <Route
-          path="groups/:groupId"
-          element={
-            <Suspense fallback={<Loading />}>
-              <GroupDetails />
-            </Suspense>
-          }
-        />
-        <Route
-          path="groups/createNewGroup"
-          element={
-            <Suspense fallback={<Loading />}>
-              <h1>create new Group</h1>
-            </Suspense>
-          }
-        />
-
-        <Route path="results" element={<h1>Results</h1>} />
-        <Route path="results/:id" element={<h1>1 Result</h1>} />
-        <Route path="students" element={<h1>Students page</h1>} />
-        <Route path="students/:studentId" element={<h1>Student Detail</h1>} />
-        <Route path="teachers">
-          <Route index element={<TeachersArea />} />
-          <Route path="new" element={<AddTeacher />} />
-          <Route path=":id" element={<TeacherInfo />} />
-        </Route>
+        {adminRoutes()}
       </Route>
 
       {/* Instructor Routes */}
@@ -158,48 +87,7 @@ const router = createBrowserRouter(
             expectedRoles={["instructor"]}
           />
         }>
-        <Route
-          path="quizzes"
-          element={
-            <Suspense fallback={<Loading />}>
-              <InstructorAllQuizzesArea />
-            </Suspense>
-          }
-        />
-        <Route
-          path="quizzes/:quizId"
-          element={
-            <Suspense fallback={<Loading />}>
-              <QuizDetails />
-            </Suspense>
-          }
-        />
-        <Route
-          path="quizzes/createQuiz"
-          element={
-            <Suspense fallback={<Loading />}>
-              <NewQuiz />
-            </Suspense>
-          }
-        />
-        <Route
-          path="groups"
-          element={
-            <Suspense fallback={<Loading />}>
-              <InstructorAllGroupArea />
-            </Suspense>
-          }
-        />
-        <Route
-          path="groups/:groupId"
-          element={
-            <Suspense fallback={<Loading />}>
-              <GroupDetails />
-            </Suspense>
-          }
-        />
-        <Route path="results" element={<h1>Results</h1>} />
-        <Route path="results/:id" element={<h1>1 Result</h1>} />
+        {instructorRoutes()}
       </Route>
 
       {/* User Routes */}
@@ -215,17 +103,7 @@ const router = createBrowserRouter(
             expectedRoles={["user"]}
           />
         }>
-        <Route path="quizzes" element={<h1>Quizzes</h1>} />
-        <Route
-          path="quizzes/:quizId"
-          element={
-            <Suspense fallback={<Loading />}>
-              <h1>User Quiz Details</h1>
-            </Suspense>
-          }
-        />
-        <Route path="results" element={<h1>My Results</h1>} />
-        <Route path="results/:quizId" element={<h1>MY 1 Quiz Result</h1>} />
+        {userRoutes()}
       </Route>
     </Route>
   )

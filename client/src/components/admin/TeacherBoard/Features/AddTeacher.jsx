@@ -3,7 +3,7 @@ import { queryClient, authorizedCreator } from "../../../../utils/http";
 import { Link } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
-import QuizInput from "../../../Quiz/QuizInput";
+import QuizInput from "../../../quiz/QuizInput";
 
 const AddTeacher = () => {
   const navigate = useNavigate();

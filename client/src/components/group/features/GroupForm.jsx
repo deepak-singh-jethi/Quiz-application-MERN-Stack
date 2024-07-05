@@ -16,7 +16,7 @@ const GroupForm = ({
   formInputs = {
     name: "",
     description: "",
-    category: "ukpsc",
+    category: "",
   },
 }) => {
   const navigate = useNavigate();
@@ -97,7 +97,6 @@ const GroupForm = ({
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             className={inputStyle}
           />
-          <label htmlFor="category">Category:</label>
           <select
             id="category"
             name="category"
@@ -106,8 +105,13 @@ const GroupForm = ({
             onChange={(e) =>
               setFormData({ ...formData, category: e.target.value })
             }>
+            <option value="" disabled>
+              Select a category
+            </option>
             {categories.map((category) => (
-              <option value={categories}>{category.toUpperCase()}</option>
+              <option value={category} key={category}>
+                {category.toUpperCase()}
+              </option>
             ))}
           </select>
           <textarea
